@@ -1,0 +1,14 @@
+services:
+  frontend:
+    build: .
+    ports:
+      - "8085:5173"
+    networks:
+      - eventure-network
+
+networks:
+  eventure-network:
+    driver: bridge
+# networks:
+#   eventure-network:
+#     external: true
