@@ -1,12 +1,11 @@
-#!/bin/bash
+
 
 echo "Starting Vite frontend build and Docker Compose..."
 
-# 1️⃣ Build frontend (з кореня)
+
 echo
 echo "=== Installing dependencies and building frontend ==="
 
-# Встановлюємо залежності
 npm install
 if [ $? -ne 0 ]; then
     echo "npm install failed!"
@@ -14,7 +13,6 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-# Збираємо продакшн-статику
 npm run build
 if [ $? -ne 0 ]; then
     echo "Vite build failed!"
@@ -23,7 +21,6 @@ if [ $? -ne 0 ]; then
 fi
 echo "Frontend build completed successfully!"
 
-# 2️⃣ Docker Compose
 echo
 echo "=== Starting Docker Compose ==="
 docker-compose up -d --build
