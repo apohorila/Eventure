@@ -84,7 +84,7 @@
 
     .home-page-img {
         max-width: 18.375rem;               
-        min-height: 19.374rem;                  
+        height: auto;                  
     }
 
     .home-page-img img {
@@ -131,14 +131,7 @@
 
 
     .home-page-img img{
-        max-width: 15rem;
-        height: auto; 
-        width: 100%;
-    }
-      .home-page-img {
-        width: 100%;
-        max-height: auto; 
-        padding: 0;
+        width: 15rem;
     }
 
     .button-link {
