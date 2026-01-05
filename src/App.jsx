@@ -9,6 +9,11 @@ function App() {
       <Header />
       <Routes>
         <Route path="/" element={<Home />} />
+        {/* <Route path="/my-events" element={<MyEvents />} />
+        <Route path="/registered" element={<Registered />} />
+        <Route path="/archived" element={<Archived />} />
+        <Route path="/create" element={<CreateEvent />} />
+        <Route path="/edit-profile" element={<EditProfile />} /> */}
       </Routes>
     </BrowserRouter>
   );

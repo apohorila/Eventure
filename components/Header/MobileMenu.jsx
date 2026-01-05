@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import styles from "./MobileMenu.module.css";
 
 const MobileMenu = ({ open, onClose }) => {
@@ -15,15 +16,27 @@ const MobileMenu = ({ open, onClose }) => {
         </div>
 
         <nav className={styles.nav}>
-          <button className={styles.navItem}>Мої івенти</button>
-          <button className={styles.navItem}>Зареєстровані івенти</button>
-          <button className={styles.navItem}>Архівовані івенти</button>
+          <Link to="/my-events" className={styles.navItem} onClick={onClose}>
+            Мої івенти
+          </Link>
+          <Link to="/registered" className={styles.navItem} onClick={onClose}>
+            Зареєстровані івенти
+          </Link>
+          <Link to="/archived" className={styles.navItem} onClick={onClose}>
+            Архівовані івенти
+          </Link>
 
-          <button className={styles.createBtn}>Створити івент</button>
+          <Link to="/create" className={styles.createBtn} onClick={onClose}>
+            Створити івент
+          </Link>
 
-          <button className={styles.editBtn}>Редагувати профіль</button>
+          <Link to="/edit-profile" className={styles.editBtn} onClick={onClose}>
+            Редагувати профіль
+          </Link>
 
-          <button className={styles.logoutBtn}>Вийти</button>
+          <Link to="/" className={styles.logoutBtn} onClick={onClose}>
+            Вийти
+          </Link>
         </nav>
       </aside>
     </div>
