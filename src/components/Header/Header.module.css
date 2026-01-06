@@ -20,7 +20,7 @@
 }
 
 .city {
-  font-size: 15px;
+  font-size: 1.25rem;
   font-weight: 500;
   display: none;
 }
@@ -32,8 +32,10 @@
 }
 
 .logo {
-  font-size: 18px;
+  font-size: 1.125rem;
   font-weight: 600;
+  color: #000;
+  text-decoration: none;
 }
 
 .searchInputMobile {
@@ -152,6 +154,7 @@
 
   .logo {
     display: block;
+    font-size: 1.5rem;
   }
 
   .searchBarDesktop {

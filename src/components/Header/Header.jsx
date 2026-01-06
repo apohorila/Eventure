@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import styles from "./Header.module.css";
 import MobileMenu from "./MobileMenu";
 
@@ -46,7 +47,11 @@ const Header = () => {
         </div>
 
         <div className={styles.center}>
-          <div className={styles.logo}>Eventure</div>
+          <div className={styles.logo}>
+            <Link to="/" className={styles.logo}>
+              Eventure
+            </Link>
+          </div>
           {searchOpen && (
             <input
               type="text"

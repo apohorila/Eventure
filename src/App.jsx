@@ -1,7 +1,8 @@
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home.jsx";
-import Header from "../components/Header/Header";
+import Header from "./components/Header/Header";
+import Footer from "./components/Footer/Footer.jsx";
 
 function App() {
   return (
@@ -13,8 +14,12 @@ function App() {
         <Route path="/registered" element={<Registered />} />
         <Route path="/archived" element={<Archived />} />
         <Route path="/create" element={<CreateEvent />} />
-        <Route path="/edit-profile" element={<EditProfile />} /> */}
+        <Route path="/edit-profile" element={<EditProfile />} /> 
+        <Route path="/community-rules" element={<CommunityRules />} />
+        <Route path="/faq" element={<FAQ />} />
+        <Route path="/privacy" element={<PrivacyPolicy />} />*/}
       </Routes>
+      <Footer />
     </BrowserRouter>
   );
 }
