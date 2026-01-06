@@ -1,0 +1,164 @@
+.header {
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  background: #fff;
+  position: relative;
+}
+
+.left {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.locationIcon {
+  display: none;
+  color: #000;
+}
+
+.city {
+  font-size: 15px;
+  font-weight: 500;
+  display: none;
+}
+
+.center {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.logo {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.searchInputMobile {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 180px;
+  height: 36px;
+  border: none;
+  background: #f5f5f5;
+  border-radius: 8px;
+  padding: 0 16px;
+  font-size: 15px;
+  outline: none;
+  top: 0;
+}
+
+.searchInputMobile::placeholder {
+  color: #999;
+}
+
+.searchBarDesktop {
+  display: none;
+}
+
+.searchInputDesktop {
+  height: 36px;
+  width: 220px;
+  border: none;
+  background: #f5f5f5;
+  border-radius: 8px;
+  padding: 0 16px;
+  font-size: 15px;
+  outline: none;
+}
+
+.searchInputDesktop::placeholder {
+  color: #999;
+}
+
+.right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.burgerMobile {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 24px;
+}
+
+.burgerMobile span {
+  display: block;
+  width: 24px;
+  height: 2px;
+  background: #000;
+  border-radius: 2px;
+}
+
+.burgerDesktop {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  display: none;
+  flex-direction: column;
+  gap: 4px;
+  width: 24px;
+}
+
+.burgerDesktop span {
+  display: block;
+  width: 24px;
+  height: 2px;
+  background: #000;
+  border-radius: 2px;
+}
+
+.searchIcon {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.searchIcon svg {
+  color: #000;
+}
+
+@media (min-width: 768px) {
+  .locationIcon,
+  .city {
+    display: block;
+  }
+
+  .burgerMobile {
+    display: none;
+  }
+
+  .burgerDesktop {
+    display: flex;
+  }
+
+  .searchInputMobile {
+    display: none;
+  }
+
+  .logo {
+    display: block;
+  }
+
+  .searchBarDesktop {
+    display: block;
+    position: absolute;
+    right: 80px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+}
