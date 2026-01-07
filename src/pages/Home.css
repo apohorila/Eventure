@@ -1,3 +1,9 @@
+.home-page-wrapper{
+    display: flex;
+    flex-direction: column;
+    gap:10rem;
+}
+
 .create-account-text{
     display: flex;
     flex-direction: column;
@@ -33,9 +39,9 @@
     max-width: 90rem;
     justify-content: flex-end;
     align-items: center;
-    margin: 6.25rem auto;
+    margin: 2.5rem auto 0 auto;
     gap:210px;
-    margin-top: 6.87rem;
+    padding-left:4.875rem;
 
 }
 
@@ -52,18 +58,18 @@
     height: auto;
     margin: 0;
 }
-
 .popular-events-container{
-    padding: 4.8125rem;
+    padding-left:4.875rem;
+    padding-right:4.875rem;
+   
 }
-
 
 @media (max-width: 768px) {
 
     /* Home-Page 1-st part */
     .create-account-container {
         display: flex;
-        /* padding:1.25rem ;        */
+        padding:1.25rem ;       
         justify-content: center;
         align-items:center ;
         gap: 1.25rem;
@@ -105,17 +111,20 @@
 
 
 @media (max-width: 480px) {
+    .home-page-wrapper{
+        gap:5rem;
+    }
     .create-account-container {
         flex-direction: column;
         align-items: flex-start;
         max-width: 15rem; 
-        margin-top: 3.5rem;    
+        margin-top: 2.87rem;    
     }
 
     .create-account-text h1 {
         font-size: 1.375rem; 
         line-height: 1.2;
-        margin-bottom: 0;
+        margin: 0;
         
     }
 
@@ -147,18 +156,14 @@
         border-radius: 2.5rem;
     }
 
-    /* Popular events part */
-
     .popular-events-container{
-        max-width: 15rem;
-        display: flex;
-        flex-direction: column;
-        margin: 0 auto;
+        padding:0 2.5rem;
     }
     .popular-events-container h1{
-        max-width: 15rem;
         font-size: 1.375rem;
-        
+        padding-left:1.5625rem;
+        margin-bottom:1.25rem;
     }
+     
 }
         /* Home-Page 2-nd part */

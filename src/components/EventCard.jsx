@@ -14,10 +14,7 @@ export default function EventCard({event}){
                     <span>10 серпня</span>
                     <span className="city">Київ</span>
                 </div>
-                
                     <Link to="/events/:id" className="event-link-button"><img src="src/assets/icons/right-arrow.png"/></Link>
-        
-                
             </div>
         </div>
     )
