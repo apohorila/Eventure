@@ -1,4 +1,6 @@
 import { useState } from "react";
+// 1. Додаємо імпорт Link
+import { Link } from "react-router-dom";
 import styles from "./Header.module.css";
 import MobileMenu from "./MobileMenu";
 
@@ -10,14 +12,17 @@ const Header = () => {
     <>
       <header className={styles.header}>
         <div className={styles.left}>
-          <button
-            className={styles.burgerMobile}
-            onClick={() => setMenuOpen(true)}
-          >
-            <span></span>
-            <span></span>
-            <span></span>
-          </button>
+          {!searchOpen && (
+            <button
+              className={styles.burgerMobile}
+              onClick={() => setMenuOpen(true)}
+            >
+              <span></span>
+              <span></span>
+              <span></span>
+            </button>
+          )}
+
           <svg
             className={styles.locationIcon}
             width="25"
@@ -45,51 +50,89 @@ const Header = () => {
           <span className={styles.city}>Київ</span>
         </div>
 
-        <div className={styles.center}>
-          <div className={styles.logo}>Eventure</div>
-          {searchOpen && (
-            <input
-              type="text"
-              placeholder="Пошук..."
-              className={styles.searchInputMobile}
-              autoFocus
-              onBlur={() => setSearchOpen(false)}
-            />
-          )}
-        </div>
+        {searchOpen ? (
+          <div className={styles.centerExpanded}>
+            <div className={styles.searchBarContainer}>
+              <button
+                className={styles.backBtn}
+                onClick={() => setSearchOpen(false)}
+              >
+                <svg
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M15 18L9 12L15 6"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </button>
 
-        {searchOpen && (
-          <div className={styles.searchBarDesktop}>
-            <input
-              type="text"
-              placeholder="Пошук..."
-              className={styles.searchInputDesktop}
-              autoFocus
-            />
+              <input
+                type="text"
+                placeholder="Пошук..."
+                className={styles.searchInputExpanded}
+                autoFocus
+                onBlur={() => setSearchOpen(false)}
+              />
+
+              <div className={styles.searchIconInside}>
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                  <circle
+                    cx="8"
+                    cy="8"
+                    r="6"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  />
+                  <path
+                    d="M12.5 12.5L17 17"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                  />
+                </svg>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <div className={styles.center}>
+            <Link to="/" className={styles.logo}>
+              Eventure
+            </Link>
           </div>
         )}
 
         <div className={styles.right}>
-          <button
-            className={styles.searchIcon}
-            onClick={() => setSearchOpen(!searchOpen)}
-          >
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-              <circle
-                cx="8"
-                cy="8"
-                r="6"
-                stroke="currentColor"
-                strokeWidth="2"
-              />
-              <path
-                d="M12.5 12.5L17 17"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-              />
-            </svg>
-          </button>
+          {!searchOpen && (
+            <button
+              className={styles.searchIconTrigger}
+              onClick={() => setSearchOpen(true)}
+            >
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                <circle
+                  cx="8"
+                  cy="8"
+                  r="6"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                />
+                <path
+                  d="M12.5 12.5L17 17"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                />
+              </svg>
+            </button>
+          )}
+
           <button
             className={styles.burgerDesktop}
             onClick={() => setMenuOpen(true)}
