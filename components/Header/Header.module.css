@@ -21,7 +21,7 @@
 }
 
 .city {
-  font-size: 20px; /* Зберігаємо більший розмір з HEAD */
+  font-size: 20px;
   font-weight: 500;
   display: none;
 }
@@ -34,7 +34,7 @@
 }
 
 .logo {
-  font-size: 24px; /* Зберігаємо більший розмір з HEAD */
+  font-size: 24px;
   font-weight: 600;
   white-space: nowrap;
   text-decoration: none;
