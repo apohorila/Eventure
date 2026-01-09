@@ -1,17 +1,15 @@
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home.jsx";
-import Header from "./components/Header/Header";
-import Footer from "./components/Footer/Footer.jsx";
+import Header from "../components/Header/Header.jsx";
+import Footer from "../components/Footer/Footer.jsx";
 
 function App() {
   return (
     <BrowserRouter>
       <Header />
-
       <Routes>
         <Route path="/" element={<Home />} />
-
         {/* 
         <Route path="/my-events" element={<MyEvents />} />
         <Route path="/registered" element={<Registered />} />
@@ -23,7 +21,6 @@ function App() {
         <Route path="/privacy" element={<PrivacyPolicy />} />
         */}
       </Routes>
-
       <Footer />
     </BrowserRouter>
   );

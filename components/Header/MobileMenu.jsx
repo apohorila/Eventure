@@ -3,6 +3,7 @@ import styles from "./MobileMenu.module.css";
 
 const MobileMenu = ({ open, onClose }) => {
   if (!open) return null;
+
   const ArrowSvg = (
     <svg
       width="24"
@@ -42,7 +43,6 @@ const MobileMenu = ({ open, onClose }) => {
         <nav className={styles.nav}>
           <Link to="/my-events" className={styles.navCard} onClick={onClose}>
             <span>Мої івенти</span>
-
             <span className={styles.arrow}>{ArrowSvg}</span>
           </Link>
 
@@ -53,7 +53,6 @@ const MobileMenu = ({ open, onClose }) => {
 
           <Link to="/archived" className={styles.navCard} onClick={onClose}>
             <span>Архівовані івенти</span>
-
             <span className={styles.arrow}>{ArrowSvg}</span>
           </Link>
         </nav>

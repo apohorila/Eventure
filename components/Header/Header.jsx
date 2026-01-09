@@ -1,5 +1,4 @@
 import { useState } from "react";
-
 import { Link } from "react-router-dom";
 import styles from "./Header.module.css";
 import MobileMenu from "./MobileMenu";
@@ -22,7 +21,6 @@ const Header = () => {
               <span></span>
             </button>
           )}
-
           <svg
             className={styles.locationIcon}
             width="25"
@@ -46,7 +44,6 @@ const Header = () => {
               fill="none"
             />
           </svg>
-
           <span className={styles.city}>Київ</span>
         </div>
 
@@ -73,7 +70,6 @@ const Header = () => {
                   />
                 </svg>
               </button>
-
               <input
                 type="text"
                 placeholder="Пошук..."
@@ -81,7 +77,6 @@ const Header = () => {
                 autoFocus
                 onBlur={() => setSearchOpen(false)}
               />
-
               <div className={styles.searchIconInside}>
                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
                   <circle
@@ -103,9 +98,11 @@ const Header = () => {
           </div>
         ) : (
           <div className={styles.center}>
-            <Link to="/" className={styles.logo}>
-              Eventure
-            </Link>
+            <div className={styles.logo}>
+              <Link to="/" className={styles.logo}>
+                Eventure
+              </Link>
+            </div>
           </div>
         )}
 
@@ -132,7 +129,6 @@ const Header = () => {
               </svg>
             </button>
           )}
-
           <button
             className={styles.burgerDesktop}
             onClick={() => setMenuOpen(true)}

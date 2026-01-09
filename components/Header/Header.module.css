@@ -21,7 +21,7 @@
 }
 
 .city {
-  font-size: 20px;
+  font-size: 20px; /* Зберігаємо більший розмір з HEAD */
   font-weight: 500;
   display: none;
 }
@@ -34,7 +34,7 @@
 }
 
 .logo {
-  font-size: 24px;
+  font-size: 24px; /* Зберігаємо більший розмір з HEAD */
   font-weight: 600;
   white-space: nowrap;
   text-decoration: none;
@@ -156,16 +156,6 @@
   justify-content: center;
 }
 
-.searchIconTrigger {
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 4px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
 .searchIconTrigger svg {
   color: #000;
 }
@@ -175,6 +165,7 @@
   .city {
     display: block;
   }
+
   .centerExpanded {
     margin: 0 24px;
   }
@@ -185,5 +176,10 @@
 
   .burgerDesktop {
     display: flex;
+  }
+
+  .logo {
+    display: block;
+    font-size: 1.5rem;
   }
 }
