@@ -14,18 +14,7 @@
     width: 3rem;
 }
 
-@media(max-width:768px) {
-    .swiper-nav-buttons, .swiper-slide, .swiper-slide-active .swiper-initialized,.swiper-horizontal,.swiper-backface-hidden,.event-swiper    
-     {
-        max-width: 100%;
-    }
-    .ivent-swiper{
-        width: 100%;
-    }
-    .swiper-nav-buttons img {
-    width: 3rem;
-}
-}
+
 
 @media (max-width:480px){
     .swiper-nav-buttons, .swiper-slide, .swiper-slide-active .swiper-initialized,.swiper-horizontal,.swiper-backface-hidden,.event-swiper    

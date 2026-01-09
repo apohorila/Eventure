@@ -1,8 +1,8 @@
 import React from "react"
 import {Link} from "react-router-dom"
 import "./Home.css"
-import EventCard from "../components/EventCard"
 import EventCarousel from "../components/EventCarousel/EventCarousel"
+import EventCategory from "../components/EventCategory/EventCategory"
 
 export default function Home(){
     return ( <>
@@ -25,8 +25,20 @@ export default function Home(){
         <div className="popular-events-container">
             <h1>Популярні івенти</h1>
             <EventCarousel />
-            {/* <EventCard/> */}
         </div>
+        </section>
+        <section>
+            <div className="event-categories-section">
+                <h1>Категорії</h1>
+                <div className="event-categories-container">
+                    <EventCategory name="Спорт та активний відпочинок" />
+                    <EventCategory name="Ігри та хобі" />
+                    <EventCategory name="Соціальні та міські заходи" />
+                    <EventCategory name="Подорожі та поїздки" />
+                    <EventCategory name="Волонтерство" />
+                    <EventCategory name="Освіта та розвиток" />
+                </div>
+            </div>
         </section>
     </main>
     </>
