@@ -3,7 +3,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 16px;
+  padding: 0 24px;
   background: #fff;
   position: relative;
 }
@@ -11,7 +11,8 @@
 .left {
   display: flex;
   align-items: center;
-  gap: 6px;
+  flex-shrink: 0;
+  gap: 4px;
 }
 
 .locationIcon {
@@ -20,7 +21,7 @@
 }
 
 .city {
-  font-size: 1.25rem;
+  font-size: 20px;
   font-weight: 500;
   display: none;
 }
@@ -29,57 +30,80 @@
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
+  transition: opacity 0.2s ease;
 }
 
 .logo {
-  font-size: 1.125rem;
+  font-size: 24px;
   font-weight: 600;
-  color: #000;
+  white-space: nowrap;
   text-decoration: none;
+  color: #000;
 }
 
-.searchInputMobile {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 180px;
-  height: 36px;
+.centerExpanded {
+  position: static;
+  transform: none;
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  margin: 0;
+  padding: 0 15px;
+}
+
+.searchBarContainer {
+  display: flex;
+  align-items: center;
+  width: 90%;
+  height: 40px;
+  background: #ffffff;
+  border: 1px solid #000000;
+  border-radius: 24px;
+  padding: 0 12px;
+  box-sizing: border-box;
+}
+
+.backBtn {
+  background: none;
   border: none;
-  background: #f5f5f5;
-  border-radius: 8px;
-  padding: 0 16px;
-  font-size: 15px;
-  outline: none;
-  top: 0;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 8px;
+  color: #000;
+  flex-shrink: 0;
 }
 
-.searchInputMobile::placeholder {
+.searchInputExpanded {
+  flex-grow: 1;
+  border: none;
+  background: transparent;
+  font-size: 18px;
+  outline: none;
+  height: 100%;
+  padding: 0 4px;
+  min-width: 0;
+}
+
+.searchInputExpanded::placeholder {
   color: #999;
 }
 
-.searchBarDesktop {
-  display: none;
-}
-
-.searchInputDesktop {
-  height: 36px;
-  width: 220px;
-  border: none;
-  background: #f5f5f5;
-  border-radius: 8px;
-  padding: 0 16px;
-  font-size: 15px;
-  outline: none;
-}
-
-.searchInputDesktop::placeholder {
-  color: #999;
+.searchIconInside {
+  color: #000;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
 }
 
 .right {
   display: flex;
   align-items: center;
   gap: 12px;
+  flex-shrink: 0;
+  justify-content: flex-end;
 }
 
 .burgerMobile {
@@ -91,6 +115,7 @@
   flex-direction: column;
   gap: 4px;
   width: 24px;
+  box-sizing: content-box;
 }
 
 .burgerMobile span {
@@ -110,6 +135,7 @@
   flex-direction: column;
   gap: 4px;
   width: 24px;
+  box-sizing: content-box;
 }
 
 .burgerDesktop span {
@@ -120,7 +146,7 @@
   border-radius: 2px;
 }
 
-.searchIcon {
+.searchIconTrigger {
   background: none;
   border: none;
   cursor: pointer;
@@ -130,7 +156,7 @@
   justify-content: center;
 }
 
-.searchIcon svg {
+.searchIconTrigger svg {
   color: #000;
 }
 
@@ -138,6 +164,10 @@
   .locationIcon,
   .city {
     display: block;
+  }
+
+  .centerExpanded {
+    margin: 0 24px;
   }
 
   .burgerMobile {
@@ -148,20 +178,8 @@
     display: flex;
   }
 
-  .searchInputMobile {
-    display: none;
-  }
-
   .logo {
     display: block;
     font-size: 1.5rem;
-  }
-
-  .searchBarDesktop {
-    display: block;
-    position: absolute;
-    right: 80px;
-    top: 50%;
-    transform: translateY(-50%);
   }
 }
