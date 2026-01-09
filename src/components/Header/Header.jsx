@@ -2,10 +2,12 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import styles from "./Header.module.css";
 import MobileMenu from "./MobileMenu";
+import { useAuth } from "../../context/AuthContext";
 
 const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
+  const { isAuthenticated } = useAuth();
 
   return (
     <>
@@ -140,7 +142,11 @@ const Header = () => {
         </div>
       </header>
 
-      <MobileMenu open={menuOpen} onClose={() => setMenuOpen(false)} />
+      <MobileMenu
+        open={menuOpen}
+        onClose={() => setMenuOpen(false)}
+        isAuthenticated={isAuthenticated}
+      />
     </>
   );
 };
