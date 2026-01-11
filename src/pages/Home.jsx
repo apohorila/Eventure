@@ -1,11 +1,13 @@
 import React, {useState, useEffect} from "react"
 import {Link} from "react-router-dom"
+import { useAuth } from "../context/AuthContext";
 import "./Home.css"
 import EventCarousel from "../components/EventCarousel/EventCarousel"
 import EventCategory from "../components/EventCategory/EventCategory"
 import { getHomeData } from "../../api"
 
 export default function Home(){
+    const { isAuthenticated } = useAuth();
     const [homeData,setHomeData] = useState(null)
     const [error, setError] = useState(null)
 
@@ -35,19 +37,30 @@ export default function Home(){
     <section>
      <div className="create-account-container">
             <div className="create-account-text">
-                <h1>Ваші інтереси <br />
-                    Ваша компанія
-                </h1>
-                <p>Eventure - це платформа для пошуку однодумців. Ми допомагаємо вам перетворити ваші інтереси  на реальні події. Організовуйте власні зустрічі або знаходьте ідеальний івент поруч із вами — від гри в баскетбол до спільного походу в кіно.</p>
-                <Link to="/create" className="button-link">Створити акаунт</Link>
+              <h1>
+                Ваші інтереси <br />
+                Ваша компанія
+              </h1>
+              <p>
+                Eventure - це платформа для пошуку однодумців. Ми допомагаємо
+                вам перетворити ваші інтереси на реальні події. Організовуйте
+                власні зустрічі або знаходьте ідеальний івент поруч із вами —
+                від гри в баскетбол до спільного походу в кіно.
+              </p>
+              <Link
+                to={isAuthenticated ? "/create" : "/login"}
+                className="button-link"
+              >
+                {isAuthenticated ? "Створити івент" : "Створити акаунт"}
+              </Link>
             </div>
             <div className="home-page-img">
-                <img src="https://placehold.co/585x540" />
+              <img src="https://placehold.co/585x540" />
             </div>
-        </div>
-    </section>
-    <section>
-        <div className="popular-events-container">
+          </div>
+        </section>
+        <section>
+          <div className="popular-events-container">
             <h1>Популярні івенти</h1>
             <EventCarousel events={homeData.trendingEvents}/>
         </div>
@@ -59,8 +72,9 @@ export default function Home(){
                     {eventCategories}
                 </div>
             </div>
+          </div>
         </section>
-    </main>
+      </main>
     </>
-    )
+  );
 }
