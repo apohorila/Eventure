@@ -3,32 +3,24 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation } from 'swiper/modules';
 import EventCard from "../EventCard/EventCard"
 import { SwiperNavButtons } from './SwiperNavButtons';
-import { getPopularEvents } from '../../../api';
+
 
 import 'swiper/css';
 import 'swiper/css/navigation';
 
 
-export default function EventCarousel(){
-    // const [events,setEvents] = useState([]);
-    // const [loading, setLoading] = useState(true);
-    // const [error, setError] = useState(null);
-
-    // useEffect(()=>{
-    //     async function loadEvents() {
-    //         setLoading(true)
-    //         try{
-    //             const data = await getPopularEvents()
-    //             setEvents(data)
-    //         } catch (err){
-    //             setError(err)
-    //         }finally {
-    //             setLoading(false)
-    //         }
-    //     }
-    //     loadEvents()
-    // }, [])
-
+export default function EventCarousel({events}){
+    const eventSliders = events.map(event => {
+        return (
+        <SwiperSlide key={event.id}>
+            <EventCard 
+             imageUrl={event.imageUrl}
+             title={event.title}
+             location={event.location}
+             date={event.eventDate}/>
+        </SwiperSlide>
+        )
+    })
     return (
         <Swiper
         slidesPerView={"auto"}
@@ -49,16 +41,8 @@ export default function EventCarousel(){
         modules={[Navigation]}
         className='event-swiper'
         >
-       <SwiperSlide><EventCard /></SwiperSlide>
-       <SwiperSlide><EventCard /></SwiperSlide>
-       <SwiperSlide><EventCard /></SwiperSlide>
-       <SwiperSlide><EventCard /></SwiperSlide>
-       <SwiperSlide><EventCard /></SwiperSlide>
-       <SwiperSlide><EventCard /></SwiperSlide>
-       <SwiperSlide><EventCard /></SwiperSlide>
-       <SwiperSlide><EventCard /></SwiperSlide>
-       <SwiperSlide><EventCard /></SwiperSlide>
-       <SwiperNavButtons />
+             {eventSliders}
+            <SwiperNavButtons />
         </Swiper>
     )
 }

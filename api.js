@@ -1,6 +1,6 @@
 
-export async function getPopularEvents(){
-   const res = await fetch("")
+export async function getHomeData(){
+   const res = await fetch("http://localhost:8082/api/v1/home")
    if (!res.ok) {
     throw {
         message:"Failed to fetch popular events",
@@ -9,6 +9,5 @@ export async function getPopularEvents(){
     }
    }
    const data = await res.json()
-   return data.vans
-
+   return data
 }
