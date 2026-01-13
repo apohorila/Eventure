@@ -1,0 +1,224 @@
+fieldset {
+    border: none;
+}
+form {
+    border: 1px solid #040404;
+    border-radius: 20px;
+    max-width: 942px;
+    margin:110px auto;
+    box-sizing: border-box;
+    padding: 40px 144px;
+}
+form h2 {
+    font-size: 2.5rem;
+    font-weight: 500;
+    margin:0;
+    margin-bottom: 40px;
+    width: 434px;
+}
+label, .photo-placeholder span {
+    font-size: 1.5rem;
+    font-weight: 500;
+}
+select{
+    appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url('src/assets/icons/down-arrow.png');
+  background-repeat: no-repeat;
+  background-size: 26px;
+  background-position: calc(100% - 35px) center;
+  cursor: pointer;
+}
+select option, .city-select:valid, .gender-select:valid{
+    color:black;
+    font-family: 'Stolzl',sans-serif;
+}
+.photo-selectors{
+    padding: 0;
+}
+.photo-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap:1.81rem;
+    background-color: #C3C3C3;
+    width: 20rem;
+    height: 20rem;
+    border-radius: 20px;
+    overflow: hidden;
+}
+.user-icon{
+    width:5.625rem;
+}
+.user-pic{
+    width: 100%;
+    object-fit: cover;
+
+}
+.photo-selectors-container {
+    display: flex;
+    gap:1.25rem;
+    margin-bottom: 40px;
+}
+.photo-selectors-container select {
+    font-size: 1.375rem;
+    color: #C3C3C3;
+    padding: 1rem 104px 1rem 2.18rem;
+    border: 1px solid black;
+    border-radius: 60px;
+    gap:10px;
+}
+.selectors-container{
+    display: flex;
+    flex-direction: column;
+    gap:1.25rem;
+}
+.city-selector, .gender-selector{
+    display: flex;
+    flex-direction: column;
+    gap:0.625rem;
+}
+.about-links-container, .about-me, .socials{
+    display: flex;
+    flex-direction: column;
+}
+.about-links-container{
+    gap: 1.25rem;
+}
+.about-me, .socials{
+    gap: 0.625rem;
+}
+.about-me textarea {
+    font-size: 1.375rem;
+    font-family: 'Stolzl', sans-serif;
+    color: #313131; 
+    border: 1px solid black;
+    border-radius: 60px; 
+    padding: 15px 35px; 
+    resize: none;
+    box-sizing: border-box;
+    width: 100%;
+    outline: none;
+}
+.socials input{
+    font-size: 1.375rem;
+    font-family: 'Stolzl', sans-serif;
+     padding: 15px 35px; 
+     border-radius: 60px;
+     border: 1px solid balck;
+}
+.add-more-button{
+    font-size: 1.375rem;
+    font-family: 'Stolzl', sans-serif;
+    box-sizing: border-box;
+    width: 300px;
+    padding-left: 50px;
+    border: none;
+    background: none;
+    cursor: pointer;
+}
+.interests-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap:20px;
+    font-weight: 400;
+}
+.event-category{
+    font-weight: 400;
+    background-color: transparent;
+}
+.interest-item{
+    cursor: pointer
+}
+.interest-item.checked {
+    color: #ED7C30;
+}
+.button-link{
+    font-family: 'Stolzl',sans-serif;
+    margin:2.15rem 0;
+    cursor: pointer;
+}
+
+@media(max-width:480px){
+    form h2 {
+        font-size: 1.375rem;
+        width: 15rem;
+        margin-bottom: 1.25rem;
+    }
+    form {
+        border: none;
+        max-width: 15rem;
+        align-self: center;
+        padding: 0;
+        margin: 60px auto;
+        align-items: flex-start;
+    }
+    .photo-placeholder {
+        width: 6.875rem;
+        height: 6.875rem;
+        gap:5px;
+    }
+   
+    label {
+        font-size: 0.875rem;
+    }
+    .photo-selectors-container select{
+        font-size: 0.875rem;
+        font-weight: 500;
+        width: 110px;
+        padding: 10px 15px;
+        background-size: 20px;
+        background-position: calc(100% - 15px) center;
+    }
+    .photo-selectors-container{
+        gap:20px
+    }
+     .photo-placeholder span{
+        font-size:0.875rem;
+        width: 6.25rem;
+        text-align: center;
+    }
+    .selectors-container{
+        gap:10px;
+    }
+    .city-selector, .gender-selector{
+        gap:5px;
+    }
+    .about-links-container{
+        padding: 0;
+    }
+    .about-me textarea, .socials {
+        max-width: 15rem;
+        font-size: 0.875rem;
+        font-weight: 500;
+    }
+    .about-me textarea{
+        padding: 10px 15px;
+    }
+    .add-more-button{
+        font-size:0.875rem ;
+        padding-left: 10px;
+        max-width: 160px;
+    }
+    .socials input {
+        font-size: 14px;
+        padding: 10px 15px;
+        font-weight: 500;
+    }
+    .button-link{
+        width: 15rem;
+        align-self: center;
+    }
+    .select-interests-section{
+        padding: 0;
+        margin-top: 20px;
+    }
+    .select-categories{
+        padding: 0;
+    }
+    .user-icon{
+        width: 2.5rem;
+    }
+}

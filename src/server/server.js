@@ -76,7 +76,7 @@ this.get("/home", () => {
     categories: [
         {id : 1, name: "Cпорт та активний відпочинок", iconName:"sport"},
         {id : 2, name: "Ігри та хобі", iconName:"games"},
-        {id : 3, name: "Соціальні та міські звходи", iconName:"social"},
+        {id : 3, name: "Соціальні та міські заходи", iconName:"social"},
         {id : 4, name: "Подорожі та поїздки", iconName:"travel"},
         {id : 5, name: "Волонтерство", iconName:"volunteering"},
         {id : 6, name: "Освіта та розвиток", iconName:"education"},
@@ -84,6 +84,27 @@ this.get("/home", () => {
     
   }
 });
+this.get("/categories", ()=>{
+  return {
+    categories : [
+      {id : 1, name: "Cпорт та активний відпочинок", iconName:"sport"},
+        {id : 2, name: "Ігри та хобі", iconName:"games"},
+        {id : 3, name: "Соціальні та міські заходи", iconName:"social"},
+        {id : 4, name: "Подорожі та поїздки", iconName:"travel"},
+        {id : 5, name: "Волонтерство", iconName:"volunteering"},
+        {id : 6, name: "Освіта та розвиток", iconName:"education"},
+    ]
+  }
+})
+this.post('/profiles',(schema,request)=>{
+const attrs = JSON.parse(request.requestBody); 
+  
+  console.log("Отримані дані:", attrs)
+  return {
+    profile: attrs,
+    status: 'Created'
+  };
+})
     },
   })
 }
