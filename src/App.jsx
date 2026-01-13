@@ -6,6 +6,7 @@ import Footer from "./components/Footer/Footer.jsx";
 import { AuthProvider } from "./context/AuthContext";
 import Login from "./pages/Login/Login.jsx";
 import PublicRoute from "./routes/PublicRoute";
+import Register from "./pages/Register/Register.jsx";
 
 function App() {
   return (
@@ -19,6 +20,14 @@ function App() {
             element={
               <PublicRoute>
                 <Login />
+              </PublicRoute>
+            }
+          />
+          <Route
+            path="/register"
+            element={
+              <PublicRoute>
+                <Register />
               </PublicRoute>
             }
           />
