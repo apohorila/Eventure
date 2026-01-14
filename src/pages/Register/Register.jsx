@@ -10,7 +10,6 @@ const Register = () => {
   const [form, setForm] = useState({
     lastName: "",
     firstName: "",
-    username: "",
     email: "",
     password: "",
     confirmPassword: "",
@@ -21,16 +20,27 @@ const Register = () => {
   const [error, setError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [emailError, setEmailError] = useState("");
-  const [usernameError, setUsernameError] = useState("");
-  const [checkingUsername, setCheckingUsername] = useState(false);
+  const [checkingEmail, setCheckingEmail] = useState(false);
 
   const isValidEmail = (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
 
-  //test function to simulate username uniqueness check
-  const checkUsernameUnique = async (username) => {
-    const takenUsernames = ["admin", "test", "user123"];
+  //test
+  const checkEmailUnique = async (email) => {
+    const takenEmails = ["test@example.com", "admin@example.com"];
     await new Promise((res) => setTimeout(res, 600));
-    return !takenUsernames.includes(username.toLowerCase());
+    return !takenEmails.includes(email.toLowerCase());
+  };
+
+  const validateEmailUnique = async () => {
+    if (!form.email || emailError || !isValidEmail(form.email)) return;
+
+    setCheckingEmail(true);
+    const isUnique = await checkEmailUnique(form.email);
+
+    if (!isUnique) {
+      setEmailError("Ця електронна пошта вже використовується");
+    }
+    setCheckingEmail(false);
   };
 
   const handleChange = (e) => {
@@ -47,10 +57,6 @@ const Register = () => {
 
     if (name === "email") {
       setEmailError("");
-    }
-
-    if (name === "username") {
-      setUsernameError("");
     }
 
     setError("");
@@ -81,24 +87,6 @@ const Register = () => {
       setPasswordError("");
     }
   };
-  const validateUsername = async () => {
-    if (!form.username) {
-      setUsernameError("");
-      return;
-    }
-
-    setCheckingUsername(true);
-
-    const isUnique = await checkUsernameUnique(form.username);
-
-    if (!isUnique) {
-      setUsernameError("Цей логін вже зайнятий");
-    } else {
-      setUsernameError("");
-    }
-
-    setCheckingUsername(false);
-  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -106,7 +94,6 @@ const Register = () => {
     if (
       !form.lastName ||
       !form.firstName ||
-      !form.username ||
       !form.email ||
       !form.password ||
       !form.confirmPassword
@@ -115,7 +102,7 @@ const Register = () => {
       return;
     }
 
-    if (emailError || passwordError || usernameError) {
+    if (emailError || passwordError) {
       setError("Виправте помилки у формі");
       return;
     }
@@ -128,7 +115,6 @@ const Register = () => {
     setRegistrationData({
       lastName: form.lastName,
       firstName: form.firstName,
-      username: form.username,
       email: form.email,
       password: form.password,
       newsletter: form.newsletter,
@@ -136,16 +122,15 @@ const Register = () => {
 
     navigate("/create-profile");
 
-    //test
+    // test
 
-    // console.log("збережено в контекст:", {
-    //   lastName: form.lastName,
-    //   firstName: form.firstName,
-    //   username: form.username,
-    //   email: form.email,
-    //   password: form.password,
-    //   newsletter: form.newsletter,
-    // });
+    console.log("збережено в контекст:", {
+      lastName: form.lastName,
+      firstName: form.firstName,
+      email: form.email,
+      password: form.password,
+      newsletter: form.newsletter,
+    });
   };
 
   return (
@@ -177,23 +162,6 @@ const Register = () => {
           </label>
 
           <label className={styles.label}>
-            Логін*
-            <input
-              className={styles.input}
-              name="username"
-              placeholder="Імʼя користувача"
-              value={form.username}
-              onChange={handleChange}
-              onBlur={validateUsername}
-            />
-          </label>
-
-          {checkingUsername && (
-            <p className={styles.helper}>Перевірка логіну…</p>
-          )}
-          {usernameError && <p className={styles.error}>{usernameError}</p>}
-
-          <label className={styles.label}>
             Електронна пошта*
             <input
               className={styles.input}
@@ -201,10 +169,13 @@ const Register = () => {
               placeholder="Email"
               value={form.email}
               onChange={handleChange}
-              onBlur={validateEmail}
+              onBlur={() => {
+                validateEmail();
+                validateEmailUnique();
+              }}
             />
           </label>
-
+          {checkingEmail && <p className={styles.helper}>Перевірка email…</p>}
           {emailError && <p className={styles.error}>{emailError}</p>}
 
           <label className={styles.label}>
