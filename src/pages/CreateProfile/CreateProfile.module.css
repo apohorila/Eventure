@@ -24,7 +24,7 @@
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
-  background-image: url('src/assets/icons/down-arrow.png');
+  background-image: url("src/assets/icons/down-arrow.png");
   background-repeat: no-repeat;
   background-size: 26px;
   background-position: calc(100% - 30px) center;
