@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import styles from "./Register.module.css";
+import { useRegistration } from "../../context/RegistrationContext";
 
 const Register = () => {
   const navigate = useNavigate();
+  const { setRegistrationData } = useRegistration();
 
   const [form, setForm] = useState({
     lastName: "",
@@ -123,8 +125,27 @@ const Register = () => {
       return;
     }
 
-    // test register logic
-    navigate("/profile");
+    setRegistrationData({
+      lastName: form.lastName,
+      firstName: form.firstName,
+      username: form.username,
+      email: form.email,
+      password: form.password,
+      newsletter: form.newsletter,
+    });
+
+    navigate("/create-profile");
+
+    //test
+
+    // console.log("збережено в контекст:", {
+    //   lastName: form.lastName,
+    //   firstName: form.firstName,
+    //   username: form.username,
+    //   email: form.email,
+    //   password: form.password,
+    //   newsletter: form.newsletter,
+    // });
   };
 
   return (

@@ -7,31 +7,45 @@ import { AuthProvider } from "./context/AuthContext";
 import Login from "./pages/Login/Login.jsx";
 import PublicRoute from "./routes/PublicRoute";
 import Register from "./pages/Register/Register.jsx";
+import { RegistrationProvider } from "./context/RegistrationContext.jsx";
+import CreateProfile from "./pages/CreateProfile/CreateProfile.jsx";
+import { CategoryProvider } from "./context/CategoryContext";
 
 function App() {
   return (
     <AuthProvider>
-      <BrowserRouter>
-        <Header />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route
-            path="/login"
-            element={
-              <PublicRoute>
-                <Login />
-              </PublicRoute>
-            }
-          />
-          <Route
-            path="/register"
-            element={
-              <PublicRoute>
-                <Register />
-              </PublicRoute>
-            }
-          />
-          {/* <Route path="/my-events" element={<MyEvents />} />
+      <RegistrationProvider>
+        <CategoryProvider>
+          <BrowserRouter>
+            <Header />
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route
+                path="/login"
+                element={
+                  <PublicRoute>
+                    <Login />
+                  </PublicRoute>
+                }
+              />
+              <Route
+                path="/register"
+                element={
+                  <PublicRoute>
+                    <Register />
+                  </PublicRoute>
+                }
+              />
+              <Route
+                path="/create-profile"
+                element={
+                  <PublicRoute>
+                    <CreateProfile />
+                  </PublicRoute>
+                }
+              />
+
+              {/* <Route path="/my-events" element={<MyEvents />} />
         <Route path="/registered" element={<Registered />} />
         <Route path="/archived" element={<Archived />} />
         <Route path="/create" element={<CreateEvent />} />
@@ -39,12 +53,12 @@ function App() {
         <Route path="/community-rules" element={<CommunityRules />} />
         <Route path="/faq" element={<FAQ />} />
         <Route path="/privacy" element={<PrivacyPolicy />} />
-       
-        <Route path="/register" element={<Register/>} />
         <Route path="/profile" element={<Profile />} />*/}
-        </Routes>
-        <Footer />
-      </BrowserRouter>
+            </Routes>
+            <Footer />
+          </BrowserRouter>
+        </CategoryProvider>
+      </RegistrationProvider>
     </AuthProvider>
   );
 }
