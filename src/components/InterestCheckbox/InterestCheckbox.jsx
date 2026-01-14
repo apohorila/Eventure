@@ -1,10 +1,11 @@
 import React from "react"
 import EventCategory from "../EventCategory/EventCategory"
+import styles from "../../pages/CreateProfile/CreateProfile.module.css"
 
 export default function InterestCheckbox({category, isSelected, onToggle}){
     return (
         <>
-        <label className={`interest-item ${isSelected ? "checked": ""}`}>
+        <label className={`${styles.interestItem} ${isSelected ? styles.checked : ""}`}>
             <input 
             type="checkbox"
             checked={isSelected}

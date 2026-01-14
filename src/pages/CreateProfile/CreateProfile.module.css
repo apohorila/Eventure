@@ -1,7 +1,7 @@
-fieldset {
+.fieldset {
     border: none;
 }
-form {
+.formContainer {
     border: 1px solid #040404;
     border-radius: 20px;
     max-width: 942px;
@@ -9,35 +9,35 @@ form {
     box-sizing: border-box;
     padding: 40px 144px;
 }
-form h2 {
+.title {
     font-size: 2.5rem;
     font-weight: 500;
     margin:0;
     margin-bottom: 40px;
     width: 434px;
 }
-label, .photo-placeholder span {
+.labelText, .photoPlaceholderSpan {
     font-size: 1.5rem;
     font-weight: 500;
 }
-select{
-    appearance: none;
+.selectField{
+  appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
   background-image: url('src/assets/icons/down-arrow.png');
   background-repeat: no-repeat;
   background-size: 26px;
-  background-position: calc(100% - 35px) center;
+  background-position: calc(100% - 30px) center;
   cursor: pointer;
 }
-select option, .city-select:valid, .gender-select:valid{
+.selectOption, .citySelect:valid, .genderSelect:valid{
     color:black;
     font-family: 'Stolzl',sans-serif;
 }
-.photo-selectors{
+.photoSelectors{
     padding: 0;
 }
-.photo-placeholder {
+.photoPlaceholder {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -49,20 +49,20 @@ select option, .city-select:valid, .gender-select:valid{
     border-radius: 20px;
     overflow: hidden;
 }
-.user-icon{
+.userIcon{
     width:5.625rem;
 }
-.user-pic{
+.userPic{
     width: 100%;
     object-fit: cover;
 
 }
-.photo-selectors-container {
+.photoSelectorsContainer {
     display: flex;
     gap:1.25rem;
     margin-bottom: 40px;
 }
-.photo-selectors-container select {
+.photoSelectorsContainerSelect {
     font-size: 1.375rem;
     color: #C3C3C3;
     padding: 1rem 104px 1rem 2.18rem;
@@ -70,27 +70,39 @@ select option, .city-select:valid, .gender-select:valid{
     border-radius: 60px;
     gap:10px;
 }
-.selectors-container{
+.selectorsContainer{
     display: flex;
     flex-direction: column;
     gap:1.25rem;
 }
-.city-selector, .gender-selector{
+.citySelector, .genderSelector{
     display: flex;
     flex-direction: column;
     gap:0.625rem;
 }
-.about-links-container, .about-me, .socials{
+.citySelect, .genderSelect{
+    font-size: 20px;
+    color: #C3C3C3;
+    padding: 15px 30px;
+    border: 1px solid black;
+    border-radius: 60px;
+    width:310px;
+}
+.selectOption {
+    color: #000000;
+    background-color: white;
+}
+.aboutLinksContainer, .aboutMe, .socials{
     display: flex;
     flex-direction: column;
 }
-.about-links-container{
+.aboutLinksContainer{
     gap: 1.25rem;
 }
-.about-me, .socials{
+.aboutMe, .socials{
     gap: 0.625rem;
 }
-.about-me textarea {
+.aboutMeField {
     font-size: 1.375rem;
     font-family: 'Stolzl', sans-serif;
     color: #313131; 
@@ -102,14 +114,14 @@ select option, .city-select:valid, .gender-select:valid{
     width: 100%;
     outline: none;
 }
-.socials input{
+.socialsInput{
     font-size: 1.375rem;
     font-family: 'Stolzl', sans-serif;
      padding: 15px 35px; 
      border-radius: 60px;
-     border: 1px solid balck;
+     border: 1px solid black;
 }
-.add-more-button{
+.addMoreButton{
     font-size: 1.375rem;
     font-family: 'Stolzl', sans-serif;
     box-sizing: border-box;
@@ -119,35 +131,45 @@ select option, .city-select:valid, .gender-select:valid{
     background: none;
     cursor: pointer;
 }
-.interests-container {
+.interestsContainer {
     display: flex;
     flex-wrap: wrap;
     gap:20px;
     font-weight: 400;
+    padding: 0;
 }
-.event-category{
+.eventCategory{
     font-weight: 400;
     background-color: transparent;
 }
-.interest-item{
+.interestItem{
     cursor: pointer
 }
-.interest-item.checked {
+.checked {
     color: #ED7C30;
+    border-color: #ED7C30;
 }
-.button-link{
-    font-family: 'Stolzl',sans-serif;
-    margin:2.15rem 0;
-    cursor: pointer;
+.buttonLink{
+    width: fit-content;
+    font-size: 1.5rem;
+    font-family:"Stolzl",sans-serif;
+    font-weight: 500;
+    padding: 0.625em 1.729em;
+    background-color:#ED7C30 ;
+    border: 2px solid #040404;
+    border-radius: 60px;
+    color: #040404;
+    text-align: center;
+    margin-top:40px;
 }
 
 @media(max-width:480px){
-    form h2 {
+    .title {
         font-size: 1.375rem;
         width: 15rem;
         margin-bottom: 1.25rem;
     }
-    form {
+    .formContainer {
         border: none;
         max-width: 15rem;
         align-self: center;
@@ -155,16 +177,16 @@ select option, .city-select:valid, .gender-select:valid{
         margin: 60px auto;
         align-items: flex-start;
     }
-    .photo-placeholder {
+    .photoPlaceholder {
         width: 6.875rem;
         height: 6.875rem;
         gap:5px;
     }
    
-    label {
+    .labelText {
         font-size: 0.875rem;
     }
-    .photo-selectors-container select{
+    .photoSelectorsContainerSelect{
         font-size: 0.875rem;
         font-weight: 500;
         width: 110px;
@@ -172,53 +194,66 @@ select option, .city-select:valid, .gender-select:valid{
         background-size: 20px;
         background-position: calc(100% - 15px) center;
     }
-    .photo-selectors-container{
+    .photoSelectorsContainer{
         gap:20px
     }
-     .photo-placeholder span{
+     .photoPlaceholderSpan{
         font-size:0.875rem;
         width: 6.25rem;
         text-align: center;
     }
-    .selectors-container{
+    .selectorsContainer{
         gap:10px;
     }
-    .city-selector, .gender-selector{
+    .citySelector, .genderSelector{
         gap:5px;
     }
-    .about-links-container{
+    .citySelect, .genderSelect{
+        padding: 10px 16px;
+        max-width: 110px;
+        font-size: 14px;
+        font-family: "Stolzl",sans-serif;
+        font-weight: 500;
+    }
+    .selectField{
+        background-size: 15px;
+         background-position: calc(100% - 8px) center;
+    }
+    .aboutLinksContainer{
         padding: 0;
     }
-    .about-me textarea, .socials {
+    .aboutMeField, .socials {
         max-width: 15rem;
         font-size: 0.875rem;
         font-weight: 500;
     }
-    .about-me textarea{
+    .aboutMeField{
         padding: 10px 15px;
     }
-    .add-more-button{
+    .addMoreButton{
         font-size:0.875rem ;
         padding-left: 10px;
         max-width: 160px;
     }
-    .socials input {
+    .socialsInput {
         font-size: 14px;
         padding: 10px 15px;
         font-weight: 500;
     }
-    .button-link{
+    .buttonLink{
         width: 15rem;
         align-self: center;
+        font-size: 14px;
+        margin-top:20px;
     }
-    .select-interests-section{
+    .selectInterestsSection{
         padding: 0;
         margin-top: 20px;
     }
-    .select-categories{
+    .selectCategories{
         padding: 0;
     }
-    .user-icon{
+    .userIcon{
         width: 2.5rem;
     }
 }

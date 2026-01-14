@@ -1,6 +1,6 @@
 import React, {useState} from "react"
 import {useNavigate} from "react-router-dom"
-import "./CreateProfile.css"
+import styles from "./CreateProfile.module.css"
 import { useCategories } from '../../context/CategoryContext';
 import InterestCheckbox from "../../components/InterestCheckbox/InterestCheckbox";
 
@@ -83,60 +83,60 @@ const handleSubmit = async (e) => {
 }
     return (
        <section>
-        <form onSubmit={handleSubmit} >
-            <h2>Додай інформацію про себе</h2>
-            <fieldset className="photo-selectors">
-                <div className="photo-selectors-container">
+        <form className={styles.formContainer} onSubmit={handleSubmit} >
+            <h2 className={styles.title}>Додай інформацію про себе</h2>
+            <fieldset className={`${styles.photoSelectors} ${styles.fieldset}`}>
+                <div className={styles.photoSelectorsContainer}>
                     <label htmlFor="photo-upload">
-                         <div className="photo-placeholder">
-                            {previewPic ? (<img src={previewPic} alt="picture" className="user-pic"/>):
+                         <div className={styles.photoPlaceholder}>
+                            {previewPic ? (<img src={previewPic} alt="picture" className={styles.userPic}/>):
                             (
                             <>
-                            <img src="src/assets/icons/user.png" alt="" className="user-icon"/>
-                            <span className="photo-placeholder-text">Додати фото</span>
+                            <img src="src/assets/icons/user.png" alt="" className={styles.userIcon}/>
+                            <span className={styles.photoPlaceholderSpan}>Додати фото</span>
                             </>
                         )}
                         </div>
                         <input type="file" id="photo-upload" accept="image/*" style={{display: "none"}} onChange={handleFileChange} />
                     </label>
                 
-                <div className="selectors-container">
-                    <div className="city-selector">
-                    <label htmlFor="city">Місто</label>
-                    <select id="city" name="city" value={profileData.city} required className="city-select" onChange={handleChange}  >
-                        <option value="" disabled  hidden >Оберіть місто*</option>
-                        <option value="kyiv">Київ</option>
-                        <option value="lviv">Львів</option>
+                <div className={styles.selectorsContainer}>
+                    <div className={styles.citySelector}>
+                    <label htmlFor="city" className={styles.labelText}>Місто</label>
+                    <select id="city" name="city" value={profileData.city} required className={`${styles.citySelect} ${styles.selectField}`} onChange={handleChange}  >
+                        <option value="" disabled  hidden >Оберіть*</option>
+                        <option value="kyiv" className={styles.selectOption}>Київ</option>
+                        <option value="lviv" className={styles.selectOption}>Львів</option>
                     </select>
                     </div>
-                    <div className="gender-selector">
-                    <label htmlFor="gender">Стать</label>
-                    <select id="gender" name="gender" required value={profileData.gender} onChange={handleChange}  className="gender-select" >
-                        <option value="" disabled hidden>Оберіть стать*</option>
-                        <option value="female">Жіноча</option>
-                        <option value="male">Чоловіча</option>
-                        <option value="none">Не хочу вказувати</option>
+                    <div className={styles.genderSelector}>
+                    <label htmlFor="gender" className={styles.labelText}>Стать</label>
+                    <select id="gender" name="gender" required value={profileData.gender} onChange={handleChange}  className={`${styles.genderSelect} ${styles.selectField}`} >
+                        <option value="" disabled hidden>Оберіть*</option>
+                        <option value="female" className={styles.selectOption}>Жіноча</option>
+                        <option value="male" className={styles.selectOption}>Чоловіча</option>
+                        <option value="none" className={styles.selectOption}>Не хочу вказувати</option>
                     </select>
                     </div>
                     </div>
                 </div>
             </fieldset>
-            <fieldset className="about-links-container">
-                <div className="about-me">
-                <label htmlFor="about-me">Про себе</label>
-                <textarea id="about-me" placeholder="Про себе" name="aboutMe" value={profileData.aboutMe} onChange={handleChange}></textarea> 
+            <fieldset className={`${styles.aboutLinksContainer} ${styles.fieldset}`}>
+                <div className={styles.aboutMe}>
+                <label htmlFor="about-me" className={styles.labelText}>Про себе</label>
+                <textarea id="about-me" placeholder="Про себе" name="aboutMe" value={profileData.aboutMe} onChange={handleChange} className={styles.aboutMeField}></textarea> 
                 </div>
-                <div className="socials">
-                <label htmlFor="socials">Соціальні мережі</label>
-                <input type="url" id="socials" placeholder="Посилання на соц. мережі"  onChange={handleChange} required/>
-                <button type="button" className="add-more-button" onClick={handleAddLink}>+ додати ще одне</button>
+                <div className={styles.socials}>
+                <label htmlFor="socials" className={styles.labelText}>Соціальні мережі</label>
+                <input type="url" id="socials" placeholder="Посилання на соц. мережі"  onChange={handleChange} required className={styles.socialsInput}/>
+                <button type="button" className={styles.addMoreButton} onClick={handleAddLink}>+ додати ще одне</button>
                 </div>
             </fieldset>
-            <fieldset className="select-interests-section">
+            <fieldset className={`${styles.selectInterestsSection} ${styles.fieldset}`}>
             </fieldset>
-            <fieldset className="select-categories">
-                <h2>Обери інтереси</h2>
-                <div className="interests-container">
+            <fieldset className={`${styles.selectCategories} ${styles.fieldset}`}>
+                <h2 className={styles.title}>Обери інтереси</h2>
+                <div className={styles.interestsContainer}>
                         {categories.map(category=>(
                             <InterestCheckbox
                             key={category.id}
@@ -147,7 +147,7 @@ const handleSubmit = async (e) => {
                         ))}
                 </div>
             </fieldset>
-            <button type="submit" className="button-link">Створити профіль</button>
+            <button type="submit" className={styles.buttonLink}>Створити профіль</button>
 
         </form>
        </section>
