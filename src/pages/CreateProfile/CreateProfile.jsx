@@ -2,17 +2,22 @@ import React, {useState} from "react"
 import {useNavigate} from "react-router-dom"
 import styles from "./CreateProfile.module.css"
 import { useCategories } from '../../context/CategoryContext';
+import { useRegistration } from "../../context/RegistrationContext";
 import InterestCheckbox from "../../components/InterestCheckbox/InterestCheckbox";
 
 export default function CreateProfile(){
+    const {registrationData} = useRegistration()
+    console.log("Дані користувача з контексту:", registrationData);
     const navigate = useNavigate()
     const {categories, loading} = useCategories();
      const [profileData, setProfileData] = useState({
-        city: '',
+        location: '',
         gender: '',
-        aboutMe: ''
+        age: '',
+        bio: '',
     })
     const [previewPic, setPreviewPic] = useState(null)
+    const [selectedFile, setSelectedFile] = useState(null)
 
     const [selectedInterests, setSelectedInterests] = useState([]);
     const [socialLinks, setSocialLinks] = useState([])
@@ -25,6 +30,7 @@ export default function CreateProfile(){
     const handleFileChange = (event) => {
         const file = event.target.files[0]
         if (file && file.type.startsWith('image/')){
+            setSelectedFile(file)
             const imageUrl= URL.createObjectURL(file)
             setPreviewPic(imageUrl)
         }
@@ -46,31 +52,34 @@ export default function CreateProfile(){
 const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (selectedInterests.length === 0) {
+        alert("Будь ласка, оберіть хоча б один інтерес!"); 
+        return; 
+    }
+    const formData = new FormData()
+    if (selectedFile) {
+        formData.append('file',selectedFile)
+    }
     const dataForServer = {
-        city: profileData.city,
+        firstName: registrationData.firstName,
+        lastName: registrationData.lastName,
+        email: registrationData.email,
+        location: profileData.location,
         gender: profileData.gender,
-        about: profileData.aboutMe,
+        bio: profileData.bio,
+        age: profileData.age,
         interests: selectedInterests, 
         socials: socialLinks          
     };
 
-    // const data = new FormData()
-    // data.append('city', profileData.city)
-    // data.append('gender',profileData.gender)
-    // data.append('aboutMe', profileData.aboutMe)
-
-    // if (file)
-    //      data.append('profilePhoto',file)
-    // selectedInterests.forEach(id=>data.append('interets', id))
-    // socialLinks.forEach(link=>data.append('socials',link))
-
+    formData.append('data', new Blob([JSON.stringify(dataForServer)], {
+        type: 'application/json'
+    }));
+    
     try {
         const response = await fetch("http://localhost:8082/api/v1/profiles", {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(dataForServer)
+            body:formData
         })
         if (response.ok) {
             const result = await response.json();
@@ -102,21 +111,21 @@ const handleSubmit = async (e) => {
                 
                 <div className={styles.selectorsContainer}>
                     <div className={styles.citySelector}>
-                    <label htmlFor="city" className={styles.labelText}>Місто</label>
-                    <select id="city" name="city" value={profileData.city} required className={`${styles.citySelect} ${styles.selectField}`} onChange={handleChange}  >
-                        <option value="" disabled  hidden >Оберіть*</option>
-                        <option value="kyiv" className={styles.selectOption}>Київ</option>
-                        <option value="lviv" className={styles.selectOption}>Львів</option>
-                    </select>
+                    <label htmlFor="city" className={styles.labelText}>Місто*</label>
+                    <input type="text" id="city" name="location" value={profileData.location} placeholder="Місто" required className={styles.input} onChange={handleChange}/>
                     </div>
                     <div className={styles.genderSelector}>
-                    <label htmlFor="gender" className={styles.labelText}>Стать</label>
+                    <label htmlFor="gender" className={styles.labelText}>Стать*</label>
                     <select id="gender" name="gender" required value={profileData.gender} onChange={handleChange}  className={`${styles.genderSelect} ${styles.selectField}`} >
-                        <option value="" disabled hidden>Оберіть*</option>
+                        <option value="" disabled hidden>Оберіть</option>
                         <option value="female" className={styles.selectOption}>Жіноча</option>
                         <option value="male" className={styles.selectOption}>Чоловіча</option>
                         <option value="none" className={styles.selectOption}>Не хочу вказувати</option>
                     </select>
+                    </div>
+                    <div className={styles.ageInput}>
+                        <label htmlFor="age" className={styles.labelText} required >Вік</label>
+                        <input type="number" id="age" name="age" value={profileData.age} placeholder="Ваш вік" className={styles.input} onChange={handleChange}/>
                     </div>
                     </div>
                 </div>
@@ -124,18 +133,18 @@ const handleSubmit = async (e) => {
             <fieldset className={`${styles.aboutLinksContainer} ${styles.fieldset}`}>
                 <div className={styles.aboutMe}>
                 <label htmlFor="about-me" className={styles.labelText}>Про себе</label>
-                <textarea id="about-me" placeholder="Про себе" name="aboutMe" value={profileData.aboutMe} onChange={handleChange} className={styles.aboutMeField}></textarea> 
+                <textarea id="about-me" placeholder="Про себе" name="bio" value={profileData.bio} onChange={handleChange} className={styles.aboutMeField} maxlenght={500}></textarea> 
                 </div>
                 <div className={styles.socials}>
-                <label htmlFor="socials" className={styles.labelText}>Соціальні мережі</label>
-                <input type="url" id="socials" placeholder="Посилання на соц. мережі"  onChange={handleChange} required className={styles.socialsInput}/>
+                <label htmlFor="socials" className={styles.labelText}>Соціальні мережі*</label>
+                <input type="url" id="socials" placeholder="Посилання на соцмережі"  onChange={handleChange} required className={styles.socialsInput}/>
                 <button type="button" className={styles.addMoreButton} onClick={handleAddLink}>+ додати ще одне</button>
                 </div>
             </fieldset>
             <fieldset className={`${styles.selectInterestsSection} ${styles.fieldset}`}>
             </fieldset>
             <fieldset className={`${styles.selectCategories} ${styles.fieldset}`}>
-                <h2 className={styles.title}>Обери інтереси</h2>
+                <h2 className={styles.title}>Обери інтереси*</h2>
                 <div className={styles.interestsContainer}>
                         {categories.map(category=>(
                             <InterestCheckbox

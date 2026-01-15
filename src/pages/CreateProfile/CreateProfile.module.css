@@ -75,12 +75,12 @@
     flex-direction: column;
     gap:1.25rem;
 }
-.citySelector, .genderSelector{
+.citySelector, .genderSelector,.ageInput{
     display: flex;
     flex-direction: column;
     gap:0.625rem;
 }
-.citySelect, .genderSelect{
+ .genderSelect{
     font-size: 20px;
     color: #C3C3C3;
     padding: 15px 30px;
@@ -113,6 +113,26 @@
     box-sizing: border-box;
     width: 100%;
     outline: none;
+}
+.input{
+    font-size: 1.375rem;
+    font-family: 'Stolzl', sans-serif;
+     padding: 15px 30px; 
+     border-radius: 60px;
+     border: 1px solid black;
+     box-sizing: border-box;
+     width: 310px;
+}
+
+.input::-webkit-outer-spin-button,
+.input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.input[type='number'] {
+  -moz-appearance: textfield;
+  appearance: textfield;
 }
 .socialsInput{
     font-size: 1.375rem;
@@ -205,15 +225,14 @@
     .selectorsContainer{
         gap:10px;
     }
-    .citySelector, .genderSelector{
+    .citySelector, .genderSelector, .ageInput{
         gap:5px;
     }
-    .citySelect, .genderSelect{
+    .input, .genderSelect{
         padding: 10px 16px;
         max-width: 110px;
         font-size: 14px;
         font-family: "Stolzl",sans-serif;
-        font-weight: 500;
     }
     .selectField{
         background-size: 15px;
@@ -225,7 +244,6 @@
     .aboutMeField, .socials {
         max-width: 15rem;
         font-size: 0.875rem;
-        font-weight: 500;
     }
     .aboutMeField{
         padding: 10px 15px;
@@ -238,7 +256,6 @@
     .socialsInput {
         font-size: 14px;
         padding: 10px 15px;
-        font-weight: 500;
     }
     .buttonLink{
         width: 15rem;

@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from "react"
 import {Link} from "react-router-dom"
 import { useAuth } from "../../context/AuthContext";
+import { useCategories } from "../../context/CategoryContext";
 import "./Home.css"
 import EventCarousel from "../../components/EventCarousel/EventCarousel"
 import EventCategory from "../../components/EventCategory/EventCategory"
@@ -8,6 +9,8 @@ import { getHomeData } from "../../server/api"
 
 export default function Home(){
     const { isAuthenticated } = useAuth();
+    const {categories, loading:categoryLoading} = useCategories()
+
     const [homeData,setHomeData] = useState(null)
     const [error, setError] = useState(null)
 
@@ -26,9 +29,9 @@ export default function Home(){
         
      }, [])
 
-     if (!homeData) return <div>Завантаження...</div>;
+     if (!homeData || categoryLoading) return <div>Завантаження...</div>;
 
-     const eventCategories = homeData.categories.map(category => (
+     const eventCategories = categories.map(category => (
             <EventCategory key={category.id} name={category.name}  iconName={category.iconName}/>
      ));
 

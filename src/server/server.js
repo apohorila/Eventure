@@ -96,15 +96,15 @@ this.get("/categories", ()=>{
     ]
   }
 })
-this.post('/profiles',(schema,request)=>{
-const attrs = JSON.parse(request.requestBody); 
-  
-  console.log("Отримані дані:", attrs)
-  return {
-    profile: attrs,
-    status: 'Created'
-  };
-})
+this.post("/profiles", (schema, request) => {
+  let attrs;
+  if (request.requestBody instanceof FormData) {
+    return { status: 'success' };
+  } else {
+    attrs = JSON.parse(request.requestBody);
+    return schema.profiles.create(attrs);
+  }
+});
     },
   })
 }
