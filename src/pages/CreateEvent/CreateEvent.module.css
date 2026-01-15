@@ -1,0 +1,381 @@
+.textInput,
+.textarea,
+.selectField {
+  width: 100%;
+  font-family: inherit;
+  box-sizing: border-box;
+}
+
+.formContainer {
+  width: calc(100% - 40px);
+  max-width: 900px;
+  margin: 100px auto;
+  padding: 32px 120px;
+  background: #ffffff;
+  border: 1px solid #000000;
+  border-radius: 20px;
+  box-sizing: border-box;
+}
+
+.title {
+  font-size: 40px;
+  font-weight: 500;
+  margin-bottom: 50px;
+}
+
+.fieldset {
+  border: none;
+  padding: 0;
+  margin-bottom: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.labelText {
+  font-size: 24px;
+  font-weight: 500;
+}
+
+.textInput {
+  height: 56px;
+  padding: 0 30px;
+  border-radius: 60px;
+  border: 1px solid #000000;
+  font-size: 22px;
+}
+
+.textInput:focus {
+  outline: none;
+  border-color: #ed7c30;
+  box-shadow: 0 0 0 2px rgba(237, 124, 48, 0.3);
+}
+
+.textarea {
+  min-height: 56px;
+  height: auto;
+  padding: 15px 30px 0px 30px;
+  border-radius: 60px;
+  border: 1px solid #000000;
+  font-size: 22px;
+  resize: none;
+  overflow: hidden;
+  line-height: 1.4;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  box-sizing: border-box;
+}
+
+.textarea:focus {
+  outline: none;
+  border-color: #ed7c30;
+  box-shadow: 0 0 0 2px rgba(237, 124, 48, 0.3);
+}
+
+.helper {
+  font-size: 16px;
+  color: #ed7c30;
+  align-self: flex-end;
+}
+
+.fieldError {
+  color: #d32f2f;
+  font-size: 14px;
+  margin-top: 5px;
+  margin-left: 15px;
+}
+
+.inputError {
+  border-color: #d32f2f !important;
+  box-shadow: 0 0 0 1px rgba(211, 47, 47, 0.3);
+}
+.error {
+  color: #d32f2f;
+  font-size: 16px;
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+.photoSelectors {
+  margin-bottom: 30px;
+}
+
+.previewContainer {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.deleteBtn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  z-index: 10;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.2s, transform 0.2s;
+}
+
+.deleteBtn:hover {
+  background: #ffffff;
+  transform: scale(1.05);
+}
+
+.deleteIcon {
+  stroke: #ed7c30;
+}
+.photoSelectorsContainer {
+  display: flex;
+  gap: 30px;
+  align-items: flex-start;
+}
+
+.photoPlaceholder {
+  width: 300px;
+  height: 200px;
+  background: #d9d9d9;
+  border-radius: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.photoPlaceholderSpan {
+  font-size: 24px;
+  font-weight: 500;
+  text-align: center;
+  padding: 20px;
+}
+
+.eventImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 20px;
+}
+
+.selectorsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  flex: 1;
+}
+
+.citySelector,
+.dateSelector {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.limitsRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  width: 100%;
+}
+
+.selectField {
+  height: 56px;
+  padding: 0 60px 0 30px;
+  border-radius: 60px;
+  border: 1px solid #000000;
+  font-size: 22px;
+  background-color: #ffffff;
+  color: #757575;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("../../assets/icons/down-arrow.png");
+  background-repeat: no-repeat;
+  background-position: right 24px center;
+  background-size: 16px 16px;
+  cursor: pointer;
+}
+
+.selectField option {
+  color: #666;
+}
+
+.selectField option[value=""] {
+  color: #999;
+}
+
+.selectField:focus {
+  outline: none;
+  border-color: #ed7c30;
+  box-shadow: 0 0 0 2px rgba(237, 124, 48, 0.3);
+}
+
+.selectCategories {
+  margin-top: 12px;
+}
+
+.interestsContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.buttonLink {
+  margin-top: 20px;
+  padding: 15px 70px;
+  border-radius: 60px;
+  font-size: 22px;
+  font-weight: 700;
+  border: 2px solid #000000;
+  background-color: #ed7c30;
+  cursor: pointer;
+  align-self: flex-start;
+}
+
+.buttonLink:hover {
+  background-color: #e46f0c;
+}
+
+@media (max-width: 768px) {
+  .formContainer {
+    padding: 32px 40px;
+    width: calc(100% - 40px);
+  }
+
+  .title {
+    font-size: 28px;
+    margin-bottom: 40px;
+  }
+
+  .labelText {
+    font-size: 18px;
+  }
+
+  .photoSelectorsContainer {
+    gap: 20px;
+    align-items: flex-start;
+  }
+
+  .photoSelectorsContainer {
+    gap: 10px;
+    align-items: flex-start;
+  }
+
+  .photoPlaceholder {
+    width: 200px;
+    height: 160px;
+    flex-shrink: 0;
+  }
+
+  .selectorsContainer {
+    min-width: 0;
+    flex: 1;
+  }
+
+  .textInput,
+  .textarea,
+  .selectField {
+    height: 48px;
+    font-size: 16px;
+  }
+
+  .limitsRow {
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+  }
+
+  .buttonLink {
+    font-size: 18px;
+    padding: 12px 50px;
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .formContainer {
+    padding: 24px 16px;
+    margin: 20px auto;
+    width: calc(100% - 24px);
+
+    border: none;
+  }
+
+  .title {
+    font-size: 24px;
+    margin-bottom: 24px;
+    text-align: left;
+  }
+
+  .labelText {
+    font-size: 14px;
+    margin-bottom: 4px;
+  }
+
+  .photoSelectorsContainer {
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+    align-items: stretch;
+  }
+
+  .photoPlaceholder {
+    width: 110px;
+    height: auto;
+    min-height: 140px;
+    flex-shrink: 0;
+    border-radius: 12px;
+    margin: 0;
+  }
+
+  .photoPlaceholderSpan {
+    font-size: 14px;
+    line-height: 1.2;
+    padding: 10px;
+  }
+
+  .selectorsContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex: 1;
+    min-width: 0;
+    gap: 10px;
+  }
+
+  .citySelector,
+  .dateSelector {
+    width: 100%;
+    gap: 0;
+  }
+
+  .textInput,
+  .selectField {
+    height: 44px;
+    font-size: 14px;
+
+    border-radius: 20px;
+  }
+
+  .textarea {
+    font-size: 14px;
+  }
+
+  .limitsRow {
+    gap: 10px;
+  }
+
+  .buttonLink {
+    width: 100%;
+    font-size: 18px;
+    padding: 14px 0;
+  }
+}

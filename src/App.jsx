@@ -10,7 +10,8 @@ import Register from "./pages/Register/Register.jsx";
 import { RegistrationProvider } from "./context/RegistrationContext.jsx";
 import CreateProfile from "./pages/CreateProfile/CreateProfile.jsx";
 import { CategoryProvider } from "./context/CategoryContext";
-
+import CreateEvent from "./pages/CreateEvent/CreateEvent.jsx";
+import PrivateRoute from "./routes/PrivateRoute";
 function App() {
   return (
     <AuthProvider>
@@ -44,7 +45,14 @@ function App() {
                   </PublicRoute>
                 }
               />
-
+              <Route
+                path="/create-event"
+                element={
+                  <PrivateRoute>
+                    <CreateEvent />
+                  </PrivateRoute>
+                }
+              />
               {/* <Route path="/my-events" element={<MyEvents />} />
         <Route path="/registered" element={<Registered />} />
         <Route path="/archived" element={<Archived />} />
