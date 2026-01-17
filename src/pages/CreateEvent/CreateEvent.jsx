@@ -131,7 +131,7 @@ export default function CreateEvent() {
       title: title,
       description: description,
       categoryId: selectedCategory,
-      city: city,
+      location: city.trim(),
       eventDate: formattedDate,
       minAge: minAge,
       maxAge: maxAge,
@@ -146,28 +146,31 @@ export default function CreateEvent() {
     );
 
     if (imageFile) {
+      console.log("photo:", imageFile.name);
       formData.append("photo", imageFile);
     }
-    navigate("/profile");
 
-    // Send data to server
-    // try {
-    //   const response = await fetch("http://localhost:8082/api/v1/events", {
-    //     method: "POST",
-    //     body: formData,
-    //   });
+    try {
+      const response = await fetch("http://localhost:8082/api/v1/events", {
+        method: "POST",
+        body: formData,
+      });
 
-    //   if (response.ok) {
-    //     navigate("/profile");
-    //   } else {
-    //     const errorData = await response.json();
-    //     console.error(errorData);
-    //     setFormError("Помилка при створенні івенту.");
-    //   }
-    // } catch (err) {
-    //   console.error(err);
-    //   setFormError("Не вдалося з'єднатися з сервером.");
-    // }
+      console.log(" Response status:", response.status);
+
+      if (response.ok) {
+        const result = await response.json();
+        console.log(result);
+        navigate("/profile");
+      } else {
+        const errorData = await response.json();
+        console.error("Server error:", errorData);
+        setFormError(errorData.message || "Помилка при створенні івенту.");
+      }
+    } catch (err) {
+      console.error("error:", err);
+      setFormError("Не вдалося з'єднатися з сервером.");
+    }
   };
 
   return (

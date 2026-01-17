@@ -3,12 +3,15 @@ import styles from "./MobileMenu.module.css";
 import { useAuth } from "../../context/AuthContext";
 
 const MobileMenu = ({ open, onClose }) => {
-  const { isAuthenticated, logout } = useAuth();
+  const { isAuthenticated, logout, user } = useAuth();
+
   if (!open) return null;
+
   const handleLogout = () => {
     logout();
     onClose();
   };
+
   const ArrowSvg = (
     <svg
       width="24"
@@ -45,8 +48,12 @@ const MobileMenu = ({ open, onClose }) => {
             >
               <div className={styles.profileAvatarPlaceholder} />
               <div className={styles.profileInfo}>
-                <div className={styles.name}>Імʼя</div>
-                <div className={styles.nick}>@name</div>
+                <div className={styles.name}>
+                  {user?.name || user?.email || "Користувач"}
+                </div>
+                <div className={styles.nick}>
+                  {user?.role ? `${user.role}` : "@user"}
+                </div>
               </div>
               <span className={styles.arrow}>{ArrowSvg}</span>
             </Link>
