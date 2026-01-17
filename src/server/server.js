@@ -105,6 +105,20 @@ this.post("/profiles", (schema, request) => {
     return schema.profiles.create(attrs);
   }
 });
+this.get("/profiles/1",()=>{
+  return {
+     
+      firstName : "Іван ",
+      lastName : "Іванов",
+      email: "ivanivanov@gmail.com",
+      bio : "Мандрівник, фотограф-аматор та поціновувач якісної кави. Завжди у пошуках нових вражень та натхнення. Вірю, що найкращі речі в житті — це не речі. Тут ділюся моментами свого життя та цікавими знахідками.",
+      location: "Київ",
+      gender: "Чоловік",
+      age : 18,
+      social_media_links: ["https://instagram.com/apohorila", "https://github.com/apohorila", "https://t.me/apohorila", "https://facebook.com/apohorila" ],
+      interests_ids: [1,3,5]
+  }
+})
     },
   })
 }
