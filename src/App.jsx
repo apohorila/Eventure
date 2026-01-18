@@ -52,7 +52,7 @@ function App() {
                 path="/profile"
                 element={
                   <PrivateRoute>
-                    <CreateProfile />
+                    <Profile />
                   </PrivateRoute>
                 }
               />
@@ -60,7 +60,7 @@ function App() {
                 path="/profile/edit"
                 element={
                   <PrivateRoute>
-                    <CreateProfile />
+                    <EditProfile />
                   </PrivateRoute>
                 }
               />
