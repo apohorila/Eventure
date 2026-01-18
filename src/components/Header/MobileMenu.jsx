@@ -88,7 +88,7 @@ const MobileMenu = ({ open, onClose }) => {
             </Link>
 
             <Link
-              to="/edit-profile"
+              to="/profile/edit"
               className={styles.secondaryBtn}
               onClick={onClose}
             >

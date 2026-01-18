@@ -3,6 +3,7 @@ import { Navigate, useNavigate, Link } from "react-router-dom";
 import EventCarousel from "../../components/EventCarousel/EventCarousel"
 import styles from "./Profile.module.css"
 import { useCategories } from "../../context/CategoryContext";
+import { useAuth } from "../../context/AuthContext";
 import { FaTelegram, FaInstagram, FaGithub, FaFacebook, FaLink } from 'react-icons/fa';
 import EventCategory from "../../components/EventCategory/EventCategory";
 import { SiTurkishairlines } from "react-icons/si";
@@ -10,6 +11,7 @@ import { SiTurkishairlines } from "react-icons/si";
 export default function Profile(){
     const navigate = useNavigate()
     const {categories} = useCategories()
+    const {logout} = useAuth()
     const [profile, setProfile] = useState()
     const [loading,setLoading] = useState()
     const [isModalOpen, setIsModalOpen] = useState(false)
@@ -59,13 +61,16 @@ export default function Profile(){
     }
 
     const handleDelete = async() =>{
-        try{
+        try{   
             const res = await fetch("http://localhost:8082/api/v1/profiles/1", {
-                method: 'DELETE'
+                method:"DELETE"
             })
             if (res.ok){
-                navigate("/home")
-            } 
+                logout()
+                navigate("/")
+            }
+            
+            
         } catch(err){
             console.error("Сталася помилка", err)
         } finally {
@@ -101,6 +106,7 @@ export default function Profile(){
                                 {getSocilaIcon(url)}
                             </a>
                         ))}
+                         </div>
                      </div>
                      <div className={styles.interestsContainer}>
                         <span className={styles.title}>Інтереси</span>
@@ -120,7 +126,7 @@ export default function Profile(){
                         <Link to="edit" className={styles.buttonLink} state={{initialData: profile}}>Редагувати профіль</Link>
                         <button className={`${styles.buttonLink} ${styles.deleteBtn}`} onClick={()=>setIsModalOpen(true)}>Видалити профіль</button>
                      </div>
-                </div>
+               
                 </div>
                 {isModalOpen && (
             <div className={styles.modalOverlay}>
@@ -130,13 +136,13 @@ export default function Profile(){
                     <div className={styles.modalButtons}>
                         <button 
                             className={styles.confirmBtn} 
-                            onClick={handleDelete}
+                            onClick={() => setIsModalOpen(false)}
                         >
                             Скасувати
                         </button>
                         <button 
                             className={styles.cancelBtn} 
-                            onClick={() => setIsModalOpen(false)}
+                            onClick={handleDelete}
                         >
                             Видалити
                         </button>
