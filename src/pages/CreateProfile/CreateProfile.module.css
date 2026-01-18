@@ -174,7 +174,7 @@
 }
 .checked {
    font-weight: 500;
-   /* border: 2px solid black; */
+
 }
 .buttonLink{
     width: fit-content;
@@ -190,6 +190,46 @@
     margin-top:40px;
     cursor: pointer;
 }
+
+@media(max-width:768px){
+    .title{
+        font-size: 24px;
+    }
+    .formContainer{
+        padding: 20px 50px;
+        box-sizing: border-box;
+        max-width: 620px;
+    }
+    .userPic{
+        width: 200px;
+        height: 200px;
+    }
+    .photoPlaceholder{
+        max-width: 200px;
+        height: 200px;
+    }
+    .input , .genderSelect{
+        font-size: 1rem;
+        padding: 10px 20px;
+    }
+    .labelText{
+        font-size: 18px;
+    }
+    .aboutMeField{
+        font-size: 1rem;
+        padding: 10px 20px;
+    }
+    .socialsInput{
+        font-size: 1rem;
+        padding: 10px 20px;
+    }
+    .addMoreButton{
+        font-size: 1rem;
+        padding-left:30px;
+        text-align: start;
+    }
+}
+
 
 @media(max-width:480px){
     .title {

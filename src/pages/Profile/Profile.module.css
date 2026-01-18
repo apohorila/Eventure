@@ -148,6 +148,48 @@
    padding: 10px 20px;
    width: fit-content;
 }
+@media (max-width:768px){
+    .mainPage{
+        padding: 0;
+        
+    }
+    .picContainer{
+        max-width: 200px;
+        height: 200px;
+    }
+    .profileInfo{
+        font-size: 16px;
+        max-width: 620px;
+        gap:50px;
+        margin: 60px auto;
+    }
+    .infoContainer, .interests,.socialsContainer{
+        max-width: 310px;
+        flex-wrap: wrap;
+    }
+    .infoContainer{
+        gap:20px;
+    }
+    .socialMediaIcon{
+        width: 30px;
+    }
+    .socials{
+        gap:20px;
+    }
+    .buttonsContainer{
+        max-width: 310px;
+        flex-direction: column;
+        gap:15px;
+    }
+    .buttonLink{
+        font-size: 16px;
+        margin: 0;
+    }
+    .socialsContainer{
+        gap:10px;
+    }
+    
+}
 
 @media(max-width:480px){
     .mainPage {
@@ -189,6 +231,7 @@
         margin:0;
         padding: 10px;
         font-size: 14px;
+        width: 240px;
     }
     .modal{
         padding:20px;

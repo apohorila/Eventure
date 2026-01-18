@@ -12,6 +12,9 @@ import CreateProfile from "./pages/CreateProfile/CreateProfile.jsx";
 import { CategoryProvider } from "./context/CategoryContext";
 import CreateEvent from "./pages/CreateEvent/CreateEvent.jsx";
 import PrivateRoute from "./routes/PrivateRoute";
+import Profile from "./pages/Profile/Profile.jsx";
+import EditProfile from "./pages/EditProfile/EditProfile.jsx";
+
 function App() {
   return (
     <AuthProvider>
@@ -40,9 +43,25 @@ function App() {
               <Route
                 path="/create-profile"
                 element={
-                  <PublicRoute>
+                  <PrivateRoute>
                     <CreateProfile />
-                  </PublicRoute>
+                  </PrivateRoute>
+                }
+              />
+               <Route
+                path="/profile"
+                element={
+                  <PrivateRoute>
+                    <CreateProfile />
+                  </PrivateRoute>
+                }
+              />
+               <Route
+                path="/profile/edit"
+                element={
+                  <PrivateRoute>
+                    <CreateProfile />
+                  </PrivateRoute>
                 }
               />
               <Route
