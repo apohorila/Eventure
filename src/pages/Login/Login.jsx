@@ -1,17 +1,37 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./Login.module.css";
+import { useAuth } from "../../context/AuthContext";
+import { useGoogleLogin } from "@react-oauth/google";
 
 const Login = () => {
   const navigate = useNavigate();
+  const { login, googleLogin } = useAuth();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const [emailError, setEmailError] = useState("");
   const [error, setError] = useState("");
-
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [attempts, setAttempts] = useState(0);
+
+  const handleGoogleClick = useGoogleLogin({
+    onSuccess: async (tokenResponse) => {
+      setIsSubmitting(true);
+      try {
+        await googleLogin(tokenResponse.access_token);
+        navigate("/");
+      } catch (err) {
+        setError("Не вдалося увійти через Google");
+      } finally {
+        setIsSubmitting(false);
+      }
+    },
+    onError: () => {
+      setError("Помилка з'єднання з Google");
+    },
+  });
 
   const isValidEmail = (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
 
@@ -28,8 +48,10 @@ const Login = () => {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
+    setEmailError("");
 
     if (!isValidEmail(email)) {
       setEmailError("Неправильний формат електронної пошти");
@@ -41,16 +63,17 @@ const Login = () => {
       return;
     }
 
-    // test login logic
-    const loginSuccess = false;
+    setIsSubmitting(true);
 
-    if (!loginSuccess) {
+    try {
+      await login(email, password);
+      navigate("/");
+    } catch (err) {
       setAttempts((prev) => prev + 1);
       setError("Неправильна електронна пошта або пароль");
-      return;
+    } finally {
+      setIsSubmitting(false);
     }
-
-    navigate("/profile");
   };
 
   return (
@@ -69,8 +92,10 @@ const Login = () => {
               onChange={(e) => {
                 setEmail(e.target.value);
                 setEmailError("");
+                setError("");
               }}
               onBlur={handleEmailBlur}
+              disabled={isSubmitting}
             />
           </label>
 
@@ -83,7 +108,11 @@ const Login = () => {
               placeholder="Ваш пароль"
               className={styles.input}
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={(e) => {
+                setPassword(e.target.value);
+                setError("");
+              }}
+              disabled={isSubmitting}
             />
           </label>
 
@@ -99,14 +128,19 @@ const Login = () => {
           )}
 
           <div className={styles.actions}>
-            <button type="submit" className={styles.primaryBtn}>
-              Увійти
+            <button
+              type="submit"
+              className={styles.primaryBtn}
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? "Вхід..." : "Увійти"}
             </button>
 
             <button
               type="button"
               className={styles.linkBtn}
               onClick={() => navigate("/reset-password")}
+              disabled={isSubmitting}
             >
               Забули пароль?
             </button>
@@ -123,11 +157,17 @@ const Login = () => {
           <button
             className={styles.secondaryBtn}
             onClick={() => navigate("/register")}
+            disabled={isSubmitting}
           >
             Зареєструватись
           </button>
 
-          <button className={styles.googleBtn}>
+          <button
+            className={styles.googleBtn}
+            disabled={isSubmitting}
+            onClick={() => handleGoogleClick()}
+            type="button"
+          >
             <img
               src="https://www.svgrepo.com/show/475656/google-color.svg"
               alt="Google"
