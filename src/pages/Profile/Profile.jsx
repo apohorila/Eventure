@@ -59,13 +59,9 @@ export default function Profile(){
     }
 
     const handleDelete = async() =>{
-        try{
-            const res = await fetch("http://localhost:8082/api/v1/profiles/1", {
-                method: 'DELETE'
-            })
-            if (res.ok){
-                navigate("/home")
-            } 
+        try{   
+        navigate("/home")
+            
         } catch(err){
             console.error("Сталася помилка", err)
         } finally {

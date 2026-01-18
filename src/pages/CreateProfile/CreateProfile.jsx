@@ -35,12 +35,20 @@ export default function CreateProfile(){
             setPreviewPic(imageUrl)
         }
     }
-    const handleAddLink = () => {
-        if (currentLink.trim()) {
-            setSocialLinks([...socialLinks, currentLink]);
-            setCurrentLink(''); 
+    const handleAddLink = (e) => {
+        
+        if (currentLink.trim() !== '') {
+            const updatedLinks = [...socialLinks, currentLink]
+            setSocialLinks(updatedLinks)
+            setCurrentLink('')
         }
     };
+
+    const handleRemoveLink = (indexToRemove) => {
+    const updatedLinks = socialLinks.filter((_, index) => index !== indexToRemove);
+    setSocialLinks(updatedLinks);
+    };
+
     const toggleInterest = (id) => {
     setSelectedInterests(prev => 
         prev.includes(id) 
@@ -124,7 +132,7 @@ const handleSubmit = async (e) => {
                     </select>
                     </div>
                     <div className={styles.ageInput}>
-                        <label htmlFor="age" className={styles.labelText} required >Вік</label>
+                        <label htmlFor="age" className={styles.labelText} required >Вік*</label>
                         <input type="number" id="age" name="age" value={profileData.age} placeholder="Ваш вік" className={styles.input} onChange={handleChange}/>
                     </div>
                     </div>
@@ -137,7 +145,21 @@ const handleSubmit = async (e) => {
                 </div>
                 <div className={styles.socials}>
                 <label htmlFor="socials" className={styles.labelText}>Соціальні мережі*</label>
-                <input type="url" id="socials" placeholder="Посилання на соцмережі"  onChange={handleChange} required className={styles.socialsInput}/>
+                <input type="url" id="socials" placeholder="Посилання на соцмережі" value={currentLink}  onChange={(e) => {setCurrentLink(e.target.value);}}  className={styles.socialsInput}/>
+                <div className={styles.linksList}>
+                        {socialLinks.map((link, index) => (
+                            <div key={index} className={styles.linkItem}>
+                                <span className={styles.linkText}>{link}</span>
+                                <button 
+                                    type="button" 
+                                    className={styles.removeLinkBtn} 
+                                    onClick={() => handleRemoveLink(index)}
+                                >
+                                    &times;
+                                </button>
+                            </div>
+                        ))}
+                    </div>
                 <button type="button" className={styles.addMoreButton} onClick={handleAddLink}>+ додати ще одне</button>
                 </div>
             </fieldset>
@@ -157,7 +179,6 @@ const handleSubmit = async (e) => {
                 </div>
             </fieldset>
             <button type="submit" className={styles.buttonLink}>Створити профіль</button>
-
         </form>
        </section>
     )
