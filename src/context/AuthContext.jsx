@@ -31,7 +31,7 @@ export const AuthProvider = ({ children }) => {
         lastName: "User",
       };
     } else {
-      // --- MOCK END ---
+      //   // --- MOCK END ---
 
       // Стандартна логіка декодування
       try {

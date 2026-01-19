@@ -10,12 +10,12 @@ export default function CreateProfile() {
   const { user } = useAuth();
   const { categories } = useCategories();
 
-  //   useEffect(() => {
-  //     const token = sessionStorage.getItem("access_token");
-  //     if (!token) {
-  //       navigate("/login");
-  //     }
-  //   }, [navigate]);
+  useEffect(() => {
+    const token = sessionStorage.getItem("access_token");
+    if (!token) {
+      navigate("/login");
+    }
+  }, [navigate]);
 
   const [profileData, setProfileData] = useState({
     location: "",
