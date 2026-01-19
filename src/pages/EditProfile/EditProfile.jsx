@@ -94,7 +94,7 @@ const EditProfile = () => {
     const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Збираємо все в один об'єкт
+
     const finalData = { 
         ...formData, 
         social_media_links: socialLinks,
@@ -105,7 +105,7 @@ const EditProfile = () => {
         const response = await fetch(`http://localhost:8082/api/v1/profiles/1`, {
             method: 'PUT',
             headers: {
-                'Content-Type': 'application/json' // Важливо для Mirage!
+                'Content-Type': 'application/json' 
             },
             body: JSON.stringify(finalData)
         });
@@ -125,7 +125,7 @@ const EditProfile = () => {
                 <section className={styles.profileInfo}>
                     <div className={styles.editPic}>
                     <div className={styles.picContainer}>
-                        <img src={previewUrl || `src/assets/icons/user.png`} alt="Preview" className={styles.avatarPreview} />
+                        <img src={previewUrl || `../assets/icons/user.png`} alt="Preview" className={previewUrl ? styles.userPic : styles.avatarPreview }/>
                         </div>
                         <label className={styles.fileLabel}>
                             Змінити фото

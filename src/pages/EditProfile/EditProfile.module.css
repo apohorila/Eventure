@@ -10,10 +10,19 @@
     background-color: #808080;
     border-radius: 20px;
 }
-.picContainer img {
+.avatarPreview{
+    width: 100px;
+}
+.userPic{
+    width: 100%;
+}
+.picContainer {
+    display: flex;
     width: 320px;
     height: 320px;
     overflow: hidden;
+    justify-content: center;
+    align-items: center;
 }
 
 .buttonLink{
@@ -126,6 +135,7 @@
     cursor: pointer;
 }
 
+
 @media(max-width:768px){
     .mainPage{
         padding: 0;
@@ -178,6 +188,9 @@
         margin-top: 0;
         font-size: 24px;
     }
+    .avatarPreview{
+    width: 60px;
+}
 }
 @media (max-width:480px){
  

@@ -54,7 +54,7 @@ export default function CreateProfile(){
         if (currentLink.trim() !== '') {
             const updatedLinks = [...socialLinks, currentLink]
             setSocialLinks(updatedLinks)
-            setCurrentLink('')
+            setCurrentLink(' ')
         }
     };
 
@@ -82,8 +82,9 @@ export default function CreateProfile(){
         return; 
     }
 
-    if(!profileData.age || !profileData.location || !profileData.gender || !profileData.socials){
+    if(!profileData.age || !profileData.location || !profileData.gender || !currentLink){
         setError("Будь ласка, заповніть всі обов'язкові поля!")
+        return
     }
 
     if (!user || !user.id) {
@@ -162,7 +163,7 @@ export default function CreateProfile(){
                             {previewPic ? (<img src={previewPic} alt="picture" className={styles.userPic}/>):
                             (
                             <>
-                            <img src="src/assets/icons/user.png" alt="" className={styles.userIcon}/>
+                            <img src="../assets/icons/user.png" alt="" className={styles.userIcon}/>
                             <span className={styles.photoPlaceholderSpan}>Додати фото</span>
                             </>
                         )}
@@ -173,7 +174,7 @@ export default function CreateProfile(){
                 <div className={styles.selectorsContainer}>
                     <div className={styles.citySelector}>
                     <label htmlFor="city" className={styles.labelText} >Місто*</label>
-                    <input type="text" id="city" name="location" value={profileData.location} placeholder="Місто" required className={styles.input} onChange={handleChange} maxlenght={MAXCITY} />
+                    <input type="text" id="city" name="location" value={profileData.location} placeholder="Місто" required className={styles.input} onChange={handleChange} maxLength={MAXCITY} />
                     </div>
                     <div className={styles.genderSelector}>
                     <label htmlFor="gender" className={styles.labelText}>Стать*</label>
@@ -209,7 +210,7 @@ export default function CreateProfile(){
                 </div>
                 <div className={styles.socials}>
                 <label htmlFor="socials" className={styles.labelText}>Соціальні мережі*</label>
-                <input type="url" id="socials" placeholder="Посилання на соцмережі" value={currentLink}  onChange={(e) => {setCurrentLink(e.target.value);}}  className={styles.socialsInput}/>
+                <input type="url" id="socials" placeholder="Посилання на соцмережі" value={currentLink} onChange={(e) => {setCurrentLink(e.target.value);}}  className={styles.socialsInput}/>
                 <div className={styles.linksList}>
                         {socialLinks.map((link, index) => (
                             <div key={index} className={styles.linkItem}>
