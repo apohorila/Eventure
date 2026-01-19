@@ -1,33 +1,32 @@
-import React, { createContext, useState, useEffect, useContext } from 'react';
+import React, { createContext, useState, useEffect, useContext } from "react";
+import { getCategories } from "../server/api";
 
 const CategoryContext = createContext();
 
 export const CategoryProvider = ({ children }) => {
-    const [categories, setCategories] = useState([]);
-    const [loading, setLoading] = useState(true);
+  const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-        const fetchCategories = async () => {
-            try {
-                const response = await fetch("http://localhost:8082/api/v1/categories");
-                const data = await response.json();
-                setCategories(data.categories);
-            } catch (error) {
-                console.error("Помилка завантаження категорій:", error);
-            } finally {
-                setLoading(false);
-            }
-        };
+  useEffect(() => {
+    const loadCategories = async () => {
+      try {
+        const data = await getCategories();
+        setCategories(data);
+      } catch (error) {
+        console.error("Помилка завантаження категорій:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-        fetchCategories();
-    }, []);
+    loadCategories();
+  }, []);
 
-    return (
-        <CategoryContext.Provider value={{ categories, loading }}>
-            {children}
-        </CategoryContext.Provider>
-    );
+  return (
+    <CategoryContext.Provider value={{ categories, loading }}>
+      {children}
+    </CategoryContext.Provider>
+  );
 };
-
 
 export const useCategories = () => useContext(CategoryContext);

@@ -83,7 +83,11 @@ const MobileMenu = ({ open, onClose }) => {
               </Link>
             </nav>
 
-            <Link to="/create" className={styles.primaryBtn} onClick={onClose}>
+            <Link
+              to="/create-event"
+              className={styles.primaryBtn}
+              onClick={onClose}
+            >
               Створити івент
             </Link>
 

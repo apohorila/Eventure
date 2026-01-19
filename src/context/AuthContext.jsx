@@ -10,7 +10,6 @@ import { jwtDecode } from "jwt-decode";
 const AuthContext = createContext();
 
 const API_URL = "http://localhost:8080/api/auth";
-const USE_MOCK = true;
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
@@ -22,23 +21,35 @@ export const AuthProvider = ({ children }) => {
 
     let userData = {};
 
-    try {
-      const decoded = authResponse.accessToken.startsWith("mock")
-        ? {}
-        : jwtDecode(authResponse.accessToken);
+    // --- MOCK START: Обробка тестового токена (щоб jwtDecode не ламався) ---
+    if (authResponse.accessToken === "mock_access_token") {
+      userData = {
+        id: 999,
+        email: "test@test.com",
+        role: "USER",
+        firstName: "Test",
+        lastName: "User",
+      };
+    } else {
+      //   // --- MOCK END ---
 
-      userData = {
-        id: authResponse.userId || decoded.sub || decoded.id,
-        email: authResponse.email || decoded.email || decoded.username,
-        role: authResponse.role || decoded.roles || decoded.role || "USER",
-      };
-    } catch (e) {
-      userData = {
-        id: authResponse.userId,
-        email: authResponse.email,
-        role: authResponse.role,
-      };
+      // Стандартна логіка декодування
+      try {
+        const decoded = jwtDecode(authResponse.accessToken);
+        userData = {
+          id: decoded.id || decoded.sub,
+          email: decoded.email || decoded.sub,
+          role: decoded.role || "USER",
+          firstName: decoded.firstName,
+          lastName: decoded.lastName,
+        };
+      } catch (e) {
+        console.error(e);
+      }
+
+      // --- MOCK START: закриття дужки else ---
     }
+    // --- MOCK END ---
 
     sessionStorage.setItem("user_data", JSON.stringify(userData));
     setUser(userData);
@@ -63,12 +74,17 @@ export const AuthProvider = ({ children }) => {
 
   const refreshTokens = useCallback(async () => {
     const refreshToken = sessionStorage.getItem("refresh_token");
-    if (!refreshToken || refreshToken.startsWith("mock_")) return;
+    if (!refreshToken) return;
+
+    // --- MOCK START: Якщо це тестовий токен, нічого не робимо або імітуємо успіх ---
+    if (refreshToken === "mock_refresh_token") return;
+    // --- MOCK END ---
 
     try {
       const response = await fetch(`${API_URL}/refresh`, {
         method: "POST",
-        headers: { Authorization: refreshToken },
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ refreshToken }),
       });
 
       if (response.ok) {
@@ -84,22 +100,59 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     if (!user) return;
-    const intervalId = setInterval(refreshTokens, 15 * 60 * 1000);
+    const intervalId = setInterval(refreshTokens, 14 * 60 * 1000);
     return () => clearInterval(intervalId);
   }, [user, refreshTokens]);
 
+  const register = async (registrationData) => {
+    // --- MOCK START: Заглушка для реєстрації ---
+    // Можна розкоментувати, якщо треба тестити реєстрацію без беку
+
+    console.log("Mock Register:", registrationData);
+    saveSession({
+      accessToken: "mock_access_token",
+      refreshToken: "mock_refresh_token",
+    });
+    return true;
+
+    // --- MOCK END ---
+
+    const response = await fetch(`${API_URL}/register`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(registrationData),
+    });
+
+    if (!response.ok) {
+      let errorMessage = "Error";
+      try {
+        const errorData = await response.json();
+        errorMessage = errorData.message || JSON.stringify(errorData);
+      } catch (e) {
+        errorMessage = await response.text();
+      }
+      throw new Error(errorMessage);
+    }
+
+    const data = await response.json();
+    saveSession(data);
+    return true;
+  };
+
   const login = async (email, password) => {
-    //test
-    if (USE_MOCK && email === "test@test.com" && password === "1234") {
+    // --- MOCK START: Заглушка для входу ---
+    if (email === "test@test.com" && password === "1234") {
+      console.log("Виконується тестовий вхід...");
+      // Імітуємо затримку як у реального сервера
+      await new Promise((resolve) => setTimeout(resolve, 500));
+
       saveSession({
         accessToken: "mock_access_token",
         refreshToken: "mock_refresh_token",
-        userId: 101,
-        email: "test@test.com",
-        role: "USER",
       });
       return true;
     }
+    // --- MOCK END ---
 
     const response = await fetch(`${API_URL}/login`, {
       method: "POST",
@@ -107,47 +160,38 @@ export const AuthProvider = ({ children }) => {
       body: JSON.stringify({ email, password }),
     });
 
-    if (!response.ok) throw new Error("Помилка входу");
+    if (!response.ok) throw new Error("Error");
+
     const data = await response.json();
     saveSession(data);
     return true;
   };
 
   const googleLogin = async (googleToken) => {
-    //для тестування
-    if (USE_MOCK) {
-      await new Promise((r) => setTimeout(r, 500));
-      const mockGoogleUser = {
-        accessToken: "mock_google_access_" + Date.now(),
-        refreshToken: "mock_google_refresh_" + Date.now(),
-        userId: 888,
-        email: "google_user@gmail.com",
-        role: "USER",
-      };
-      saveSession(mockGoogleUser);
-      return true;
-    }
+    const response = await fetch(`${API_URL}/google/login`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ token: googleToken }),
+    });
 
-    try {
-      const response = await fetch(`${API_URL}/google`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ token: googleToken }),
-      });
+    if (!response.ok) throw new Error("Error");
 
-      if (!response.ok) throw new Error("Google auth failed");
-
-      const data = await response.json();
-      saveSession(data);
-      return true;
-    } catch (error) {
-      throw error;
-    }
+    const data = await response.json();
+    saveSession(data);
+    return true;
   };
 
   const logout = async () => {
     const refreshToken = sessionStorage.getItem("refresh_token");
-    if (!USE_MOCK && refreshToken && !refreshToken.startsWith("mock_")) {
+
+    // --- MOCK START: Якщо це мок, просто чистимо сесію без запиту на сервер ---
+    if (refreshToken === "mock_refresh_token") {
+      clearSession();
+      return;
+    }
+    // --- MOCK END ---
+
+    if (refreshToken) {
       try {
         await fetch(`${API_URL}/logout`, {
           method: "POST",
@@ -161,7 +205,14 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ user, isAuthenticated: !!user, login, googleLogin, logout }}
+      value={{
+        user,
+        isAuthenticated: !!user,
+        login,
+        register,
+        googleLogin,
+        logout,
+      }}
     >
       {!loading && children}
     </AuthContext.Provider>

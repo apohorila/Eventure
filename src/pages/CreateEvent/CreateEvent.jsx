@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./CreateEvent.module.css";
 import InterestCheckbox from "../../components/InterestCheckbox/InterestCheckbox";
+import { useCategories } from "../../context/CategoryContext";
 
 const AGE_OPTIONS = {
   under18: { label: "до 18", minAge: 10, maxAge: 17 },
@@ -17,8 +18,8 @@ const GENDER_OPTIONS = {
 
 export default function CreateEvent() {
   const navigate = useNavigate();
+  const { categories } = useCategories();
 
-  const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [formError, setFormError] = useState("");
   const [chatLinkError, setChatLinkError] = useState("");
@@ -35,13 +36,6 @@ export default function CreateEvent() {
 
   const [previewImage, setPreviewImage] = useState(null);
   const [imageFile, setImageFile] = useState(null);
-
-  useEffect(() => {
-    fetch("http://localhost:8082/api/v1/categories")
-      .then((res) => res.json())
-      .then((data) => setCategories(data.categories))
-      .catch(console.error);
-  }, []);
 
   const isValidUrl = (string) => {
     try {
@@ -111,7 +105,7 @@ export default function CreateEvent() {
       !selectedCategory
     ) {
       setFormError(
-        "Будь ласка, заповніть всі обов'язкові поля та оберіть категорію"
+        "Будь ласка, заповніть всі обов'язкові поля та оберіть категорію",
       );
       return;
     }
@@ -124,7 +118,6 @@ export default function CreateEvent() {
     }
 
     const requiredGender = genderKey ? genderKey : null;
-
     const formattedDate = `${date}T00:00:00`;
 
     const eventDto = {
@@ -142,11 +135,10 @@ export default function CreateEvent() {
     const formData = new FormData();
     formData.append(
       "event",
-      new Blob([JSON.stringify(eventDto)], { type: "application/json" })
+      new Blob([JSON.stringify(eventDto)], { type: "application/json" }),
     );
 
     if (imageFile) {
-      console.log("photo:", imageFile.name);
       formData.append("photo", imageFile);
     }
 
@@ -156,11 +148,9 @@ export default function CreateEvent() {
         body: formData,
       });
 
-      console.log(" Response status:", response.status);
-
       if (response.ok) {
         const result = await response.json();
-        console.log(result);
+        console.log("Івент створено:", result);
         navigate("/profile");
       } else {
         const errorData = await response.json();
@@ -168,7 +158,7 @@ export default function CreateEvent() {
         setFormError(errorData.message || "Помилка при створенні івенту.");
       }
     } catch (err) {
-      console.error("error:", err);
+      console.error("Network error:", err);
       setFormError("Не вдалося з'єднатися з сервером.");
     }
   };
