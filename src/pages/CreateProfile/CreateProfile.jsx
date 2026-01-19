@@ -12,7 +12,6 @@ const MINCITY = 5
 const MAXCITY = 27
 
 export default function CreateProfile(){
-    const {registrationData} = useRegistration()
     const navigate = useNavigate()
     const {categories} = useCategories();
     const { user } = useAuth();
@@ -59,39 +58,7 @@ export default function CreateProfile(){
         }
     };
 
-  const [profileData, setProfileData] = useState({
-    location: "",
-    gender: "",
-    age: "",
-    bio: "",
-  });
-  const [previewPic, setPreviewPic] = useState(null);
-  const [selectedFile, setSelectedFile] = useState(null);
-  const [selectedInterests, setSelectedInterests] = useState([]);
-  const [socialLinks, setSocialLinks] = useState([]);
-  const [currentLink, setCurrentLink] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setProfileData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleFileChange = (event) => {
-    const file = event.target.files[0];
-    if (file && file.type.startsWith("image/")) {
-      setSelectedFile(file);
-      const imageUrl = URL.createObjectURL(file);
-      setPreviewPic(imageUrl);
-    }
-  };
-
-  const handleAddLink = () => {
-    if (currentLink.trim() !== "") {
-      setSocialLinks((prev) => [...prev, currentLink]);
-      setCurrentLink("");
-    }
-  };
 
   const handleRemoveLink = (indexToRemove) => {
     setSocialLinks((prev) =>
