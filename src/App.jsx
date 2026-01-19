@@ -7,7 +7,6 @@ import { AuthProvider } from "./context/AuthContext";
 import Login from "./pages/Login/Login.jsx";
 import PublicRoute from "./routes/PublicRoute";
 import Register from "./pages/Register/Register.jsx";
-import { RegistrationProvider } from "./context/RegistrationContext.jsx";
 import CreateProfile from "./pages/CreateProfile/CreateProfile.jsx";
 import { CategoryProvider } from "./context/CategoryContext";
 import CreateEvent from "./pages/CreateEvent/CreateEvent.jsx";
@@ -18,61 +17,60 @@ import EditProfile from "./pages/EditProfile/EditProfile.jsx";
 function App() {
   return (
     <AuthProvider>
-      <RegistrationProvider>
-        <CategoryProvider>
-          <BrowserRouter>
-            <Header />
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route
-                path="/login"
-                element={
-                  <PublicRoute>
-                    <Login />
-                  </PublicRoute>
-                }
-              />
-              <Route
-                path="/register"
-                element={
-                  <PublicRoute>
-                    <Register />
-                  </PublicRoute>
-                }
-              />
-              <Route
-                path="/create-profile"
-                element={
-                  <PublicRoute>
-                    <CreateProfile />
-                  </PublicRoute>
-                }
-              />
-               <Route
-                path="/profile"
-                element={
-                  <PrivateRoute>
-                    <Profile />
-                  </PrivateRoute>
-                }
-              />
-               <Route
-                path="/profile/edit"
-                element={
-                  <PrivateRoute>
-                    <EditProfile />
-                  </PrivateRoute>
-                }
-              />
-              <Route
-                path="/create-event"
-                element={
-                  <PrivateRoute>
-                    <CreateEvent />
-                  </PrivateRoute>
-                }
-              />
-              {/* <Route path="/my-events" element={<MyEvents />} />
+      <CategoryProvider>
+        <BrowserRouter>
+          <Header />
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route
+              path="/login"
+              element={
+                <PublicRoute>
+                  <Login />
+                </PublicRoute>
+              }
+            />
+            <Route
+              path="/register"
+              element={
+                <PublicRoute>
+                  <Register />
+                </PublicRoute>
+              }
+            />
+            <Route
+              path="/create-profile"
+              element={
+                <PublicRoute>
+                  <CreateProfile />
+                </PublicRoute>
+              }
+            />
+            <Route
+              path="/profile"
+              element={
+                <PrivateRoute>
+                  <Profile />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/profile/edit"
+              element={
+                <PrivateRoute>
+                  <EditProfile />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/create-event"
+              element={
+                <PrivateRoute>
+                  <CreateEvent />
+                </PrivateRoute>
+              }
+            />
+            {/* <Route path="/my-events" element={<MyEvents />} />
         <Route path="/registered" element={<Registered />} />
         <Route path="/archived" element={<Archived />} />
         <Route path="/create" element={<CreateEvent />} />
@@ -81,11 +79,10 @@ function App() {
         <Route path="/faq" element={<FAQ />} />
         <Route path="/privacy" element={<PrivacyPolicy />} />
         <Route path="/profile" element={<Profile />} />*/}
-            </Routes>
-            <Footer />
-          </BrowserRouter>
-        </CategoryProvider>
-      </RegistrationProvider>
+          </Routes>
+          <Footer />
+        </BrowserRouter>
+      </CategoryProvider>
     </AuthProvider>
   );
 }

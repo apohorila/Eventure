@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import styles from "./Register.module.css";
-import { useRegistration } from "../../context/RegistrationContext";
+import { useAuth } from "../../context/AuthContext";
 
 const EMAIL_MAX_LENGTH = 255;
 const PASSWORD_MIN_LENGTH = 8;
@@ -11,7 +11,7 @@ const NAME_MAX_LENGTH = 50;
 
 const Register = () => {
   const navigate = useNavigate();
-  const { setRegistrationData } = useRegistration();
+  const { register } = useAuth();
 
   const [form, setForm] = useState({
     lastName: "",
@@ -28,28 +28,14 @@ const Register = () => {
   const [passwordError, setPasswordError] = useState("");
   const [firstNameError, setFirstNameError] = useState("");
   const [lastNameError, setLastNameError] = useState("");
-  const [checkingEmail, setCheckingEmail] = useState(false);
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const isValidEmail = (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
 
-  const checkEmailUnique = async (email) => {
-    const takenEmails = ["test@example.com", "admin@example.com"];
-    await new Promise((res) => setTimeout(res, 600));
-    return !takenEmails.includes(email.toLowerCase());
-  };
-
-  const validateEmailUnique = async () => {
-    if (!form.email || emailError || !isValidEmail(form.email)) return;
-    setCheckingEmail(true);
-    const isUnique = await checkEmailUnique(form.email);
-    if (!isUnique) setEmailError("Ця електронна пошта вже використовується");
-    setCheckingEmail(false);
-  };
-
-  const validateEmail = () => {
+  const validateEmailFormat = () => {
     if (!form.email) {
       setEmailError("");
       return;
@@ -76,23 +62,18 @@ const Register = () => {
       setPasswordError("");
       return;
     }
-
     if (
       form.password.length < PASSWORD_MIN_LENGTH ||
       form.password.length > PASSWORD_MAX_LENGTH
     ) {
-      setPasswordError("Пароль має містити від 8 до 128 символів");
+      setPasswordError("Invalid length");
       return;
     }
-
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).*$/;
     if (!passwordRegex.test(form.password)) {
-      setPasswordError(
-        "Пароль має містити хоча б одну велику літеру, одну маленьку літеру та одну цифру"
-      );
+      setPasswordError("Пароль повинен містити великі та малі літери і цифру");
       return;
     }
-
     if (form.password !== form.confirmPassword) {
       setPasswordError("Паролі не співпадають");
     } else {
@@ -107,15 +88,18 @@ const Register = () => {
       [name]: type === "checkbox" ? checked : value,
     }));
 
-    if (name === "password" || name === "confirmPassword") setPasswordError("");
     if (name === "email") setEmailError("");
     if (name === "firstName") setFirstNameError("");
     if (name === "lastName") setLastNameError("");
+    if (name === "password" || name === "confirmPassword") setPasswordError("");
     setError("");
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
+    setEmailError("");
+
     if (
       !form.lastName ||
       !form.firstName ||
@@ -123,11 +107,11 @@ const Register = () => {
       !form.password ||
       !form.confirmPassword
     ) {
-      setError("Заповніть усі обовʼязкові поля");
+      setError("Заповніть всі обовʼязкові поля");
       return;
     }
-    if (emailError || passwordError || firstNameError || lastNameError) {
-      setError("Виправте помилки у формі");
+    if (!isValidEmail(form.email)) {
+      setEmailError("Неправильний формат електронної пошти");
       return;
     }
     if (form.password !== form.confirmPassword) {
@@ -135,17 +119,34 @@ const Register = () => {
       return;
     }
     if (!form.agree) {
-      setError("Потрібно дати згоду на обробку персональних даних");
+      setError("Потрібно погодитись на обробку персональних даних");
       return;
     }
-    setRegistrationData({
-      lastName: form.lastName,
-      firstName: form.firstName,
-      email: form.email,
-      password: form.password,
-      newsletter: form.newsletter,
-    });
-    navigate("/create-profile");
+
+    setIsSubmitting(true);
+
+    try {
+      await register({
+        firstName: form.firstName,
+        lastName: form.lastName,
+        email: form.email,
+        password: form.password,
+        isSubscribed: form.newsletter,
+      });
+
+      navigate("/create-profile");
+    } catch (err) {
+      console.error(err);
+      const message = (err.message || "").toLowerCase();
+
+      if (message.includes("email") && message.includes("exists")) {
+        setEmailError("Email вже використовується");
+      } else {
+        setError(err.message || "Error");
+      }
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -154,7 +155,6 @@ const Register = () => {
         <h1 className={styles.title}>Реєстрація</h1>
 
         <form className={styles.form} onSubmit={handleSubmit}>
-          {/* Прізвище */}
           <label className={styles.label}>
             Прізвище*
             <input
@@ -168,11 +168,11 @@ const Register = () => {
               onBlur={() =>
                 setLastNameError(validateName("Прізвище", form.lastName))
               }
+              disabled={isSubmitting}
             />
           </label>
           {lastNameError && <p className={styles.error}>{lastNameError}</p>}
 
-          {/* Імʼя */}
           <label className={styles.label}>
             Імʼя*
             <input
@@ -186,11 +186,11 @@ const Register = () => {
               onBlur={() =>
                 setFirstNameError(validateName("Імʼя", form.firstName))
               }
+              disabled={isSubmitting}
             />
           </label>
           {firstNameError && <p className={styles.error}>{firstNameError}</p>}
 
-          {/* Email */}
           <label className={styles.label}>
             Електронна пошта*
             <input
@@ -201,13 +201,10 @@ const Register = () => {
               placeholder="Email"
               value={form.email}
               onChange={handleChange}
-              onBlur={() => {
-                validateEmail();
-                validateEmailUnique();
-              }}
+              onBlur={validateEmailFormat}
+              disabled={isSubmitting}
             />
           </label>
-          {checkingEmail && <p className={styles.helper}>Перевірка email…</p>}
           {emailError && <p className={styles.error}>{emailError}</p>}
 
           <label className={styles.label}>
@@ -325,7 +322,6 @@ const Register = () => {
           </label>
           {passwordError && <p className={styles.error}>{passwordError}</p>}
 
-          {/* Checkbox */}
           <div className={styles.checkboxes}>
             <label className={styles.checkbox}>
               <input
@@ -333,6 +329,7 @@ const Register = () => {
                 name="agree"
                 checked={form.agree}
                 onChange={handleChange}
+                disabled={isSubmitting}
               />
               Даю згоду на{" "}
               <Link to="/privacy-policy" className={styles.policyLink}>
@@ -347,6 +344,7 @@ const Register = () => {
                 name="newsletter"
                 checked={form.newsletter}
                 onChange={handleChange}
+                disabled={isSubmitting}
               />
               Даю згоду на отримання поштової розсилки
             </label>
@@ -354,8 +352,12 @@ const Register = () => {
 
           {error && <p className={styles.error}>{error}</p>}
 
-          <button type="submit" className={styles.primaryBtn}>
-            Далі →
+          <button
+            type="submit"
+            className={styles.primaryBtn}
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? "..." : "Далі →"}
           </button>
         </form>
       </section>

@@ -14,7 +14,6 @@ const Login = () => {
   const [emailError, setEmailError] = useState("");
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [attempts, setAttempts] = useState(0);
 
   const handleGoogleClick = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
@@ -23,6 +22,7 @@ const Login = () => {
         await googleLogin(tokenResponse.access_token);
         navigate("/");
       } catch (err) {
+        console.error(err);
         setError("Не вдалося увійти через Google");
       } finally {
         setIsSubmitting(false);
@@ -40,7 +40,6 @@ const Login = () => {
       setEmailError("");
       return;
     }
-
     if (!isValidEmail(email)) {
       setEmailError("Неправильний формат електронної пошти");
     } else {
@@ -57,7 +56,6 @@ const Login = () => {
       setEmailError("Неправильний формат електронної пошти");
       return;
     }
-
     if (!password) {
       setError("Введіть пароль");
       return;
@@ -69,7 +67,6 @@ const Login = () => {
       await login(email, password);
       navigate("/");
     } catch (err) {
-      setAttempts((prev) => prev + 1);
       setError("Неправильна електронна пошта або пароль");
     } finally {
       setIsSubmitting(false);
@@ -98,7 +95,6 @@ const Login = () => {
               disabled={isSubmitting}
             />
           </label>
-
           {emailError && <p className={styles.error}>{emailError}</p>}
 
           <label className={styles.label}>
@@ -115,17 +111,7 @@ const Login = () => {
               disabled={isSubmitting}
             />
           </label>
-
           {error && <p className={styles.error}>{error}</p>}
-
-          {attempts >= 3 && (
-            <p className={styles.reset}>
-              Забули пароль?{" "}
-              <span onClick={() => navigate("/reset-password")}>
-                Відновити доступ
-              </span>
-            </p>
-          )}
 
           <div className={styles.actions}>
             <button
@@ -135,22 +121,14 @@ const Login = () => {
             >
               {isSubmitting ? "Вхід..." : "Увійти"}
             </button>
-
-            <button
-              type="button"
-              className={styles.linkBtn}
-              onClick={() => navigate("/reset-password")}
-              disabled={isSubmitting}
-            >
-              Забули пароль?
-            </button>
+            {/* Додаткові кнопки відновлення паролю тут */}
           </div>
         </form>
 
         <div className={styles.divider} />
 
         <p className={styles.text}>
-          Не маєте акаунту? Зареєструйтесь або увійдіть за допомогою Google
+          Не маєте акаунту? Зареєструйтесь або увійдіть через Google
         </p>
 
         <div className={styles.secondary}>
