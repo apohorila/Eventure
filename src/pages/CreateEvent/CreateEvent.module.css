@@ -16,6 +16,9 @@
   border-radius: 20px;
   box-sizing: border-box;
 }
+.participantInput {
+  margin-top: 12px;
+}
 
 .title {
   font-size: 40px;
@@ -123,7 +126,9 @@
   cursor: pointer;
   z-index: 10;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  transition: background-color 0.2s, transform 0.2s;
+  transition:
+    background-color 0.2s,
+    transform 0.2s;
 }
 
 .deleteBtn:hover {
@@ -305,7 +310,6 @@
     padding: 24px 16px;
     margin: 20px auto;
     width: calc(100% - 24px);
-
     border: none;
   }
 
@@ -361,12 +365,19 @@
   .selectField {
     height: 44px;
     font-size: 14px;
-
     border-radius: 20px;
+    padding: 0 15px;
+    width: 100%;
+  }
+
+  .selectField {
+    padding-right: 30px;
+    background-position: right 10px center;
   }
 
   .textarea {
     font-size: 14px;
+    padding: 12px 15px;
   }
 
   .limitsRow {
@@ -377,5 +388,12 @@
     width: 100%;
     font-size: 18px;
     padding: 14px 0;
+  }
+  .helper {
+    font-size: 12px;
+  }
+  .participantInput {
+    font-size: 12px;
+    padding: 0 12px;
   }
 }

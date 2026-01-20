@@ -11,6 +11,8 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const [showPassword, setShowPassword] = useState(false);
+
   const [emailError, setEmailError] = useState("");
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -101,19 +103,62 @@ const Login = () => {
 
           <label className={styles.label}>
             Пароль
-            <input
-              type="password"
-              placeholder="Ваш пароль"
-              className={styles.input}
-              value={password}
-              onChange={(e) => {
-                setPassword(e.target.value);
-                setError("");
-              }}
-              disabled={isSubmitting}
-            />
+            <div className={styles.passwordWrapper}>
+              <input
+                type={showPassword ? "text" : "password"}
+                placeholder="Ваш пароль"
+                className={styles.input}
+                value={password}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                  setError("");
+                }}
+                disabled={isSubmitting}
+              />
+              <button
+                type="button"
+                className={styles.passwordToggle}
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+                    <path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6" />
+                  </svg>
+                ) : (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <path d="M21 9c-2.4 2.667 -5.4 4 -9 4c-3.6 0 -6.6 -1.333 -9 -4" />
+                    <path d="M3 15l2.5 -3.8" />
+                    <path d="M21 14.976l-2.492 -3.776" />
+                    <path d="M9 17l.5 -4" />
+                    <path d="M15 17l-.5 -4" />
+                  </svg>
+                )}
+              </button>
+            </div>
           </label>
           {error && <p className={styles.error}>{error}</p>}
+
           {attempts >= 3 && (
             <p className={styles.reset}>
               Забули пароль?{" "}
@@ -134,7 +179,7 @@ const Login = () => {
             <button
               type="button"
               className={styles.linkBtn}
-              onClick={() => navigate("/reset-password")}
+              onClick={() => navigate("/forgot-password")}
             >
               Забули пароль?
             </button>

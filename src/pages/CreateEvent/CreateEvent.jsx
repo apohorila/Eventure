@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import styles from "./CreateEvent.module.css";
 import InterestCheckbox from "../../components/InterestCheckbox/InterestCheckbox";
 import { useCategories } from "../../context/CategoryContext";
+import { useAuth } from "../../context/AuthContext";
 
 const AGE_OPTIONS = {
   under18: { label: "до 18", minAge: 10, maxAge: 17 },
@@ -19,6 +20,7 @@ const GENDER_OPTIONS = {
 export default function CreateEvent() {
   const navigate = useNavigate();
   const { categories } = useCategories();
+  const { user } = useAuth();
 
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [formError, setFormError] = useState("");
@@ -32,6 +34,7 @@ export default function CreateEvent() {
     chatLink: "",
     ageKey: "",
     genderKey: "",
+    maxParticipants: "",
   });
 
   const [previewImage, setPreviewImage] = useState(null);
@@ -88,8 +91,22 @@ export default function CreateEvent() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const { title, description, city, date, chatLink, ageKey, genderKey } =
-      eventData;
+    const token = sessionStorage.getItem("access_token");
+    if (!token) {
+      setFormError("Помилка сесії. Токен відсутній.");
+      return;
+    }
+
+    const {
+      title,
+      description,
+      city,
+      date,
+      chatLink,
+      ageKey,
+      genderKey,
+      maxParticipants,
+    } = eventData;
 
     if (chatLink && !isValidUrl(chatLink)) {
       setChatLinkError("Некоректне посилання (потрібно http:// або https://)");
@@ -120,6 +137,10 @@ export default function CreateEvent() {
     const requiredGender = genderKey ? genderKey : null;
     const formattedDate = `${date}T00:00:00`;
 
+    const participantsLimit = maxParticipants
+      ? parseInt(maxParticipants, 10)
+      : null;
+
     const eventDto = {
       title: title,
       description: description,
@@ -129,8 +150,19 @@ export default function CreateEvent() {
       minAge: minAge,
       maxAge: maxAge,
       requiredGender: requiredGender,
+      maxParticipants: participantsLimit,
       chatLink: chatLink,
+      organizerId: user?.id,
     };
+
+    // console.group("📤 Відправка даних на сервер");
+    // console.log("JSON DTO:", eventDto);
+    // if (imageFile) {
+    //   console.log("Файл фото:", imageFile);
+    // } else {
+    //   console.log("Фото не обрано");
+    // }
+    // console.groupEnd();
 
     const formData = new FormData();
     formData.append(
@@ -145,20 +177,20 @@ export default function CreateEvent() {
     try {
       const response = await fetch("http://localhost:8082/api/v1/events", {
         method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
         body: formData,
       });
 
       if (response.ok) {
-        const result = await response.json();
-        console.log("Івент створено:", result);
+        await response.json();
         navigate("/profile");
       } else {
         const errorData = await response.json();
-        console.error("Server error:", errorData);
         setFormError(errorData.message || "Помилка при створенні івенту.");
       }
     } catch (err) {
-      console.error("Network error:", err);
       setFormError("Не вдалося з'єднатися з сервером.");
     }
   };
@@ -301,6 +333,7 @@ export default function CreateEvent() {
           <label className={styles.labelText}>
             Обмеження щодо відвідувачів
           </label>
+
           <div className={styles.limitsRow}>
             <select
               name="ageKey"
@@ -330,6 +363,16 @@ export default function CreateEvent() {
               ))}
             </select>
           </div>
+
+          <input
+            type="number"
+            name="maxParticipants"
+            value={eventData.maxParticipants}
+            onChange={handleChange}
+            min="1"
+            className={`${styles.textInput} ${styles.participantInput}`}
+            placeholder="Максимальна кількість учасників"
+          />
         </fieldset>
 
         <fieldset className={`${styles.selectCategories} ${styles.fieldset}`}>

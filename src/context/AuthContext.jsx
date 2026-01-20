@@ -5,7 +5,6 @@ import {
   useEffect,
   useCallback,
 } from "react";
-import { jwtDecode } from "jwt-decode";
 
 const AuthContext = createContext();
 
@@ -34,18 +33,17 @@ export const AuthProvider = ({ children }) => {
       //   // --- MOCK END ---
 
       // Стандартна логіка декодування
-      try {
-        const decoded = jwtDecode(authResponse.accessToken);
-        userData = {
-          id: decoded.id || decoded.sub,
-          email: decoded.email || decoded.sub,
-          role: decoded.role || "USER",
-          firstName: decoded.firstName,
-          lastName: decoded.lastName,
-        };
-      } catch (e) {
-        console.error(e);
-      }
+      const userData = {
+        id: authResponse.userId,
+        email: authResponse.email,
+        role: authResponse.role,
+        firstName: authResponse.fullName
+          ? authResponse.fullName.split(" ")[0]
+          : "",
+        lastName: authResponse.fullName
+          ? authResponse.fullName.split(" ")[1]
+          : "",
+      };
 
       // --- MOCK START: закриття дужки else ---
     }
@@ -83,10 +81,11 @@ export const AuthProvider = ({ children }) => {
     try {
       const response = await fetch(`${API_URL}/refresh`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ refreshToken }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ refreshToken: refreshToken }),
       });
-
       if (response.ok) {
         const data = await response.json();
         saveSession(data);
