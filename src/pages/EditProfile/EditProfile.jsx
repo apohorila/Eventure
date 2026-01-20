@@ -52,7 +52,6 @@ const EditProfile = () => {
         if (currentLink.trim() !== '') {
             const updatedLinks = [...socialLinks, currentLink]
             setSocialLinks(updatedLinks)
-            // setFormData({...formData, socialLinks})
             setCurrentLink('')
         }
     };
@@ -62,38 +61,8 @@ const EditProfile = () => {
     setSocialLinks(updatedLinks);
     };
 
-    // const handleSubmit = async (e) => {
-    //     e.preventDefault();
-    //     const dataToSend = new FormData();
-
-    //     const finalProfileData = {
-    //     ...formData, // беремо все зі стейту (firstName, location, bio...)
-    //     social_media_links: socialLinks, // додаємо масив лінків
-    //     interests_ids: selectedInterests // додаємо масив інтересів
-    // };
-        
-    //     if (selectedFile) {
-    //         dataToSend.append('file', selectedFile);
-    //     }
-
-    //     dataToSend.append('data', new Blob([JSON.stringify(formData)], { type: 'application/json' }));
-
-    //     try {
-    //         const response = await fetch(`http://localhost:8082/api/v1/profiles/1`, {
-    //             method: 'PUT',
-    //             body: dataToSend
-    //         });
-
-    //         if (response.ok) {
-    //             navigate('/profile'); 
-    //         }
-    //     } catch (error) {
-    //         console.error("Помилка оновлення:", error);
-    //     }
-    // };
     const handleSubmit = async (e) => {
     e.preventDefault();
-
 
     const finalData = { 
         ...formData, 
@@ -102,7 +71,7 @@ const EditProfile = () => {
     };
 
     try {
-        const response = await fetch(`http://localhost:8082/api/v1/profiles/1`, {
+        const response = await fetch(`http://localhost:8082/api/v1/profiles/${id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json' 
@@ -111,7 +80,6 @@ const EditProfile = () => {
         });
 
         if (response.ok) {
-            console.log("Профіль оновлено в Mirage");
             navigate('/profile'); 
         }
     } catch (error) {

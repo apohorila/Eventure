@@ -11,7 +11,7 @@ import { SiTurkishairlines } from "react-icons/si";
 export default function Profile(){
     const navigate = useNavigate()
     const {categories} = useCategories()
-    const {logout} = useAuth()
+    const {logout, user} = useAuth()
     const [profile, setProfile] = useState()
     const [loading,setLoading] = useState()
     const [isModalOpen, setIsModalOpen] = useState(false)
@@ -23,12 +23,10 @@ export default function Profile(){
     useEffect(()=>{
         const fetchProfile = async() => {
             try {
-                const response = await fetch("http://localhost:8082/api/v1/profiles/1")
+                const response = await fetch(`http://localhost:8082/api/v1/profiles/${user.id}`)
                 if (response.ok){
                     const data = await response.json()
-                    console.log(data)
                     setProfile(data)
-                    console.log(profile)
                 }
                 
             } catch (error){
@@ -62,7 +60,7 @@ export default function Profile(){
 
     const handleDelete = async() =>{
         try{   
-            const res = await fetch("http://localhost:8082/api/v1/profiles/1", {
+            const res = await fetch(`http://localhost:8082/api/v1/profiles/${user.id}`, {
                 method:"DELETE"
             })
             if (res.ok){

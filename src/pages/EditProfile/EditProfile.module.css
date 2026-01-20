@@ -135,6 +135,14 @@
     cursor: pointer;
 }
 
+.removeLinkBtn{
+    font-weight: 500;
+    background: none;
+    border: none;
+    cursor: pointer;
+    
+}
+
 
 @media(max-width:768px){
     .mainPage{
@@ -258,5 +266,8 @@
         flex-direction: column;
         max-width: 240px;
         gap:10px;
+    }
+    .linkItem{
+        display: flex;
     }
 }

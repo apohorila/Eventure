@@ -186,8 +186,8 @@ export default function CreateProfile(){
                     </select>
                     </div>
                     <div className={styles.ageInput}>
-                        <label htmlFor="age" className={styles.labelText} required >Вік*</label>
-                        <input type="number" id="age" name="age" value={profileData.age} min={MINAGE} max={MAXAGE} placeholder="Ваш вік" className={styles.input} onChange={handleChange}/>
+                        <label htmlFor="age" className={styles.labelText} >Вік*</label>
+                        <input type="number" id="age" name="age" value={profileData.age} min={MINAGE} max={MAXAGE} required placeholder="Ваш вік" className={styles.input} onChange={handleChange}/>
                     </div>
                     </div>
                 </div>
@@ -202,7 +202,7 @@ export default function CreateProfile(){
                 e.target.style.height = `${e.target.scrollHeight}px`;
                 }} 
                 className={styles.aboutMeField} 
-                maxlenght={500}>
+                maxLength={500}>
                     </textarea> 
                 <span className={styles.helper}>
                     {profileData.bio.length}/500
@@ -225,7 +225,7 @@ export default function CreateProfile(){
                             </div>
                         ))}
                     </div>
-                <button type="button" className={styles.addMoreButton} onClick={handleAddLink}>+ додати ще одне</button>
+                <button type="button" className={styles.addMoreButton} onClick={handleAddLink}>{socialLinks.length === 0 ? "зберегти посилання" : "+ додати ще одне"}</button>
                 </div>
             </fieldset>
             <fieldset className={`${styles.selectInterestsSection} ${styles.fieldset}`}>
