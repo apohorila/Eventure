@@ -3,7 +3,7 @@ import { createServer } from "miragejs"
 export function makeServer() {
   return createServer({
     routes() {
-      this.urlPrefix = "http://localhost:8082" 
+      this.urlPrefix = "http://localhost:8080" 
       this.namespace = "api/v1"
 
 this.get("/home", () => {
@@ -105,20 +105,64 @@ this.post("/profiles", (schema, request) => {
     return schema.profiles.create(attrs);
   }
 });
-this.get("/profiles/1",()=>{
+this.get("/profiles/:id", (schema, request) => {
+  const profileId = request.params.id; 
+
+  console.log("Mirage отримав запит для профілю з ID:", profileId);
+
   return {
-     
-      firstName : "Іван ",
-      lastName : "Іванов",
+      id: profileId, 
+      firstName: "Іван",
+      lastName: "Іванов",
       email: "ivanivanov@gmail.com",
-      bio : "Мандрівник, фотограф-аматор та поціновувач якісної кави. Завжди у пошуках нових вражень та натхнення. Вірю, що найкращі речі в житті — це не речі. Тут ділюся моментами свого життя та цікавими знахідками.",
+      bio: "Мандрівник, фотограф-аматор та поціновувач якісної кави.",
       location: "Київ",
       gender: "Чоловік",
-      age : 18,
-      social_media_links: ["https://instagram.com/apohorila", "https://github.com/apohorila", "https://t.me/apohorila", "https://facebook.com/apohorila" ],
-      interests_ids: [1,3,5]
-  }
-})
+      age: 18,
+      social_media_links: [
+        "https://instagram.com/apohorila", 
+        "https://github.com/apohorila", 
+        "https://t.me/apohorila", 
+        "https://facebook.com/apohorila"
+      ],
+      interests_ids: [1, 3, 5]
+  };
+});
+this.delete("/profiles/:id", (schema, request) => {
+  const id = request.params.id;
+  
+  // Логування для тебе, щоб бачити, що запит дійшов
+  console.log(`Mirage: Отримано запит на видалення профілю з ID: ${id}`);
+
+  // Варіант А: Якщо ти використовуєш реальну базу Mirage (найкращий варіант)
+  // let profile = schema.profiles.find(id);
+  // if (profile) {
+  //   profile.destroy();
+  //   return new Response(204); // Успіх, контенту немає
+  // }
+
+  // Варіант Б: Просто повертаємо успіх (заглушка)
+  return { status: "success", message: `Profile ${id} deleted` };
+});
+// mirage/server.js
+
+this.put("/profiles/:id", (schema, request) => {
+  const id = request.params.id;
+  
+  // Mirage отримує дані як рядок, тому розпаковуємо їх через JSON.parse
+  const updatedData = JSON.parse(request.requestBody);
+
+  console.log(`--- Mirage: Оновлення профілю ${id} ---`);
+  console.log("Нові дані отримані з фронтенду:", updatedData);
+  console.log("---------------------------------------");
+
+  // Повертаємо оновлений об'єкт як успішну відповідь
+  return {
+    id,
+    ...updatedData,
+    status: "updated"
+  };
+});
     },
   })
 }

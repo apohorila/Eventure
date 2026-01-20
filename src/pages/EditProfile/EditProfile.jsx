@@ -52,7 +52,6 @@ const EditProfile = () => {
         if (currentLink.trim() !== '') {
             const updatedLinks = [...socialLinks, currentLink]
             setSocialLinks(updatedLinks)
-            // setFormData({...formData, socialLinks})
             setCurrentLink('')
         }
     };
@@ -62,39 +61,9 @@ const EditProfile = () => {
     setSocialLinks(updatedLinks);
     };
 
-    // const handleSubmit = async (e) => {
-    //     e.preventDefault();
-    //     const dataToSend = new FormData();
-
-    //     const finalProfileData = {
-    //     ...formData, // беремо все зі стейту (firstName, location, bio...)
-    //     social_media_links: socialLinks, // додаємо масив лінків
-    //     interests_ids: selectedInterests // додаємо масив інтересів
-    // };
-        
-    //     if (selectedFile) {
-    //         dataToSend.append('file', selectedFile);
-    //     }
-
-    //     dataToSend.append('data', new Blob([JSON.stringify(formData)], { type: 'application/json' }));
-
-    //     try {
-    //         const response = await fetch(`http://localhost:8082/api/v1/profiles/1`, {
-    //             method: 'PUT',
-    //             body: dataToSend
-    //         });
-
-    //         if (response.ok) {
-    //             navigate('/profile'); 
-    //         }
-    //     } catch (error) {
-    //         console.error("Помилка оновлення:", error);
-    //     }
-    // };
     const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Збираємо все в один об'єкт
     const finalData = { 
         ...formData, 
         social_media_links: socialLinks,
@@ -102,16 +71,15 @@ const EditProfile = () => {
     };
 
     try {
-        const response = await fetch(`http://localhost:8082/api/v1/profiles/1`, {
+        const response = await fetch(`http://localhost:8080/api/v1/profiles/${id}`, {
             method: 'PUT',
             headers: {
-                'Content-Type': 'application/json' // Важливо для Mirage!
+                'Content-Type': 'application/json' 
             },
             body: JSON.stringify(finalData)
         });
 
         if (response.ok) {
-            console.log("Профіль оновлено в Mirage");
             navigate('/profile'); 
         }
     } catch (error) {
@@ -125,7 +93,7 @@ const EditProfile = () => {
                 <section className={styles.profileInfo}>
                     <div className={styles.editPic}>
                     <div className={styles.picContainer}>
-                        <img src={previewUrl || `src/assets/icons/user.png`} alt="Preview" className={styles.avatarPreview} />
+                        <img src={previewUrl || `../assets/icons/user.png`} alt="Preview" className={previewUrl ? styles.userPic : styles.avatarPreview }/>
                         </div>
                         <label className={styles.fileLabel}>
                             Змінити фото

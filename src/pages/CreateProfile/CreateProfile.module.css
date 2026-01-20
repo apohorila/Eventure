@@ -113,6 +113,7 @@
     box-sizing: border-box;
     width: 100%;
     outline: none;
+    overflow: hidden;
 }
 .input{
     font-size: 1.375rem;
@@ -122,6 +123,10 @@
      border: 1px solid black;
      box-sizing: border-box;
      width: 310px;
+}
+.input:active,.input:focus,.aboutMeField:focus, .socialsInput:focus,.genderSelect:focus{
+    border-color: #ED7C30;
+    outline: none;
 }
 
 .input::-webkit-outer-spin-button,
@@ -190,6 +195,17 @@
     margin-top:40px;
     cursor: pointer;
 }
+.helper {
+  font-size: 16px;
+  color: #ed7c30;
+  align-self: flex-end;
+}
+.error {
+  color: #d32f2f;
+  font-size: 16px;
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
 
 @media(max-width:768px){
     .title{
@@ -209,6 +225,7 @@
         height: 200px;
     }
     .input , .genderSelect{
+        width: 100%;
         font-size: 1rem;
         padding: 10px 20px;
     }

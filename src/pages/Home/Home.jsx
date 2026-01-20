@@ -51,10 +51,10 @@ export default function Home() {
               баскетбол до спільного походу в кіно.
             </p>
             <Link
-              to={isAuthenticated ? "/create-event" : "/login"}
+              to={isAuthenticated ? "/search-events" : "/login"}
               className="button-link"
             >
-              {isAuthenticated ? "Створити івент" : "Створити акаунт"}
+              {isAuthenticated ? "Знайти івент" : "Створити акаунт"}
             </Link>
           </div>
           <div className="home-page-img">

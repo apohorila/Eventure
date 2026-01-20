@@ -10,10 +10,19 @@
     background-color: #808080;
     border-radius: 20px;
 }
-.picContainer img {
+.avatarPreview{
+    width: 100px;
+}
+.userPic{
+    width: 100%;
+}
+.picContainer {
+    display: flex;
     width: 320px;
     height: 320px;
     overflow: hidden;
+    justify-content: center;
+    align-items: center;
 }
 
 .buttonLink{
@@ -126,6 +135,71 @@
     cursor: pointer;
 }
 
+.removeLinkBtn{
+    font-weight: 500;
+    background: none;
+    border: none;
+    cursor: pointer;
+    
+}
+
+
+@media(max-width:768px){
+    .mainPage{
+        padding: 0;
+        margin-left:60px;
+    }
+    .profileInfo{
+        max-width: 620px;
+        
+    }
+    .infoContainer, .buttonsContainer{
+        max-width: 350px;
+    }
+    .buttonsContainer{
+        flex-direction: column;
+        gap:15px;
+    }
+    .buttonLink{
+        margin-top: 0;
+        font-size: 18px;
+        padding: 10px;
+    }
+    .editPic{
+        max-width: 200px;
+        gap:15px;
+    }
+    .picContainer{
+        width: 200px;
+        height: 200px;
+        font-size: 14px;
+    }
+    .editPic label {
+        width: 200px;
+        font-size: 16px;
+    }
+    .label,.input{
+        font-size: 16px;
+        
+    }
+    .input{
+        padding: 10px 20px;
+    }
+    .textarea{
+        margin-top: 0;
+    }
+    .addMoreButton{
+        font-size: 16px;
+        text-align: start;
+    }
+    .interests h3 {
+        margin-top: 0;
+        font-size: 24px;
+    }
+    .avatarPreview{
+    width: 60px;
+}
+}
 @media (max-width:480px){
  
     .mainPage{
@@ -192,5 +266,8 @@
         flex-direction: column;
         max-width: 240px;
         gap:10px;
+    }
+    .linkItem{
+        display: flex;
     }
 }
