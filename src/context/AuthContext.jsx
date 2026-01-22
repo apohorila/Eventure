@@ -5,16 +5,17 @@ import {
   useEffect,
   useCallback,
 } from "react";
+import { getUserProfileSummary } from "../server/api";
 
 const AuthContext = createContext();
-
-const API_URL = "http://localhost:8080/api/auth";
+const API_BASE_URL = import.meta.env.VITE_API_URL || "";
+const API_URL = `${API_BASE_URL}/api/auth`;
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const saveSession = (authResponse) => {
+  const saveSession = (authResponse, profileData = {}) => {
     sessionStorage.setItem("access_token", authResponse.accessToken);
     sessionStorage.setItem("refresh_token", authResponse.refreshToken);
 
@@ -26,23 +27,18 @@ export const AuthProvider = ({ children }) => {
         id: 999,
         email: "test@test.com",
         role: "USER",
-        firstName: "Test",
-        lastName: "User",
+        name: "Test",
+        // avatarUrl: "https://randomuser.me/api/portraits/men/32.jpg",
       };
     } else {
       //   // --- MOCK END ---
 
-      // Стандартна логіка декодування
       const userData = {
         id: authResponse.userId,
         email: authResponse.email,
         role: authResponse.role,
-        firstName: authResponse.fullName
-          ? authResponse.fullName.split(" ")[0]
-          : "",
-        lastName: authResponse.fullName
-          ? authResponse.fullName.split(" ")[1]
-          : "",
+        name: profileData?.name || authResponse.fullName || "Користувач",
+        avatarUrl: profileData?.avatarUrl || null,
       };
 
       // --- MOCK START: закриття дужки else ---
@@ -161,8 +157,18 @@ export const AuthProvider = ({ children }) => {
 
     if (!response.ok) throw new Error("Error");
 
-    const data = await response.json();
-    saveSession(data);
+    const authData = await response.json();
+
+    let profileData = {};
+    try {
+      profileData = await getUserProfileSummary(
+        authData.userId,
+        authData.accessToken,
+      );
+    } catch (err) {
+      console.warn("Не вдалося завантажити профіль", err);
+    }
+    saveSession(authData, profileData);
     return true;
   };
 

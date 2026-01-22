@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
-import axios from "axios";
 import styles from "./ResetPasswordPage.module.css";
+
+const API_URL = import.meta.env.VITE_API_URL || "";
 
 const ResetPasswordPage = () => {
   const [searchParams] = useSearchParams();
@@ -19,7 +20,6 @@ const ResetPasswordPage = () => {
 
   const token = searchParams.get("token");
 
-  // ТЕСТОВІ КНОПКИ
   const testButtons = (
     <div
       style={{
@@ -78,7 +78,21 @@ const ResetPasswordPage = () => {
 
     const validateToken = async () => {
       try {
-        await axios.post("/api/auth/password-reset/validate", { token });
+        const response = await fetch(
+          `${API_URL}/api/auth/password-reset/validate`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ token }),
+          },
+        );
+
+        if (!response.ok) {
+          throw new Error("Token validation failed");
+        }
+
         setStatus("WELCOME");
       } catch (error) {
         console.error("Token validation failed:", error);
@@ -118,11 +132,27 @@ const ResetPasswordPage = () => {
     if (!validateForm()) return;
 
     try {
-      await axios.post("/api/auth/password-reset/confirm", {
-        token,
-        newPassword: formData.newPassword,
-        confirmPassword: formData.confirmPassword,
-      });
+      const response = await fetch(
+        `${API_URL}/api/auth/password-reset/confirm`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            token,
+            newPassword: formData.newPassword,
+            confirmPassword: formData.confirmPassword,
+          }),
+        },
+      );
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        console.error("Server error:", errorData);
+        throw new Error("Password reset failed");
+      }
+
       setStatus("SUCCESS");
     } catch (error) {
       console.error("Password reset failed:", error);

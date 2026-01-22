@@ -5,6 +5,8 @@ import InterestCheckbox from "../../components/InterestCheckbox/InterestCheckbox
 import { useCategories } from "../../context/CategoryContext";
 import { useAuth } from "../../context/AuthContext";
 
+const API_URL = import.meta.env.VITE_API_URL || "";
+
 const AGE_OPTIONS = {
   under18: { label: "до 18", minAge: 10, maxAge: 17 },
   range18_25: { label: "18–25", minAge: 18, maxAge: 25 },
@@ -91,9 +93,11 @@ export default function CreateEvent() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const token = sessionStorage.getItem("access_token");
+    const token =
+      sessionStorage.getItem("access_token") || localStorage.getItem("token");
+
     if (!token) {
-      setFormError("Помилка сесії. Токен відсутній.");
+      setFormError("Помилка сесії. Увійдіть у систему.");
       return;
     }
 
@@ -154,7 +158,6 @@ export default function CreateEvent() {
       chatLink: chatLink,
       organizerId: user?.id,
     };
-
     // console.group("📤 Відправка даних на сервер");
     // console.log("JSON DTO:", eventDto);
     // if (imageFile) {
@@ -163,7 +166,6 @@ export default function CreateEvent() {
     //   console.log("Фото не обрано");
     // }
     // console.groupEnd();
-
     const formData = new FormData();
     formData.append(
       "event",
@@ -175,7 +177,7 @@ export default function CreateEvent() {
     }
 
     try {
-      const response = await fetch("http://localhost:8082/api/v1/events", {
+      const response = await fetch(`${API_URL}/api/v1/events`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -187,10 +189,11 @@ export default function CreateEvent() {
         await response.json();
         navigate("/profile");
       } else {
-        const errorData = await response.json();
+        const errorData = await response.json().catch(() => ({}));
         setFormError(errorData.message || "Помилка при створенні івенту.");
       }
     } catch (err) {
+      console.error("Error creating event:", err);
       setFormError("Не вдалося з'єднатися з сервером.");
     }
   };

@@ -46,14 +46,19 @@ const MobileMenu = ({ open, onClose }) => {
               className={styles.profileCard}
               onClick={onClose}
             >
-              <div className={styles.profileAvatarPlaceholder} />
+              <div className={styles.profileAvatarPlaceholder}>
+                <img
+                  src={user?.avatarUrl || "/assets/icons/user.png"}
+                  alt={user?.name || "User"}
+                  className={styles.avatarImg}
+                  onError={(e) => {
+                    e.target.src = defaultAvatar;
+                  }}
+                />
+              </div>
               <div className={styles.profileInfo}>
-                <div className={styles.name}>
-                  {user?.name || user?.email || "Користувач"}
-                </div>
-                <div className={styles.nick}>
-                  {user?.role ? `${user.role}` : "@user"}
-                </div>
+                <div className={styles.name}>{user?.name || "Користувач"}</div>
+                <div className={styles.nick}>{user?.email || ""}</div>
               </div>
               <span className={styles.arrow}>{ArrowSvg}</span>
             </Link>

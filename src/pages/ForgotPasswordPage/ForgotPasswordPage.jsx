@@ -1,6 +1,7 @@
 import { useState } from "react";
-import axios from "axios";
 import styles from "./ForgotPasswordPage.module.css";
+
+const API_URL = import.meta.env.VITE_API_URL || "";
 
 const ForgotPasswordPage = () => {
   const [email, setEmail] = useState("");
@@ -115,9 +116,24 @@ const ForgotPasswordPage = () => {
 
     setLoading(true);
     try {
-      await axios.post("/api/auth/password-reset/request", { email });
+      const response = await fetch(
+        `${API_URL}/api/auth/password-reset/request`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email }),
+        },
+      );
+
+      if (!response.ok) {
+        throw new Error("Server error");
+      }
+
       setIsSent(true);
     } catch (error) {
+      console.error("Forgot password error:", error);
       setEmailError("Користувача не знайдено або помилка сервера");
     } finally {
       setLoading(false);
@@ -129,7 +145,21 @@ const ForgotPasswordPage = () => {
 
     setResending(true);
     try {
-      await axios.post("/api/auth/password-reset/request", { email });
+      const response = await fetch(
+        `${API_URL}/api/auth/password-reset/request`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email }),
+        },
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to resend");
+      }
+
       alert(`Лист успішно відправлено повторно на ${email}`);
     } catch (error) {
       console.error(error);
