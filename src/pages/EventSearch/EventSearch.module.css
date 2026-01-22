@@ -1,0 +1,189 @@
+.searchFilter {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+  margin-top: 110px;
+}
+.filters {
+  display: flex;
+  align-items: center;
+}
+.searchBar {
+  width: 100%;
+  padding: 13px 40px;
+  font-size: 20px;
+  border: 1px solid #000;
+  border-radius: 60px;
+  outline: none;
+  font-family: inherit;
+  font-weight: 500;
+}
+.searchBar:focus {
+  border-color: #ed7c30;
+  outline: none;
+}
+.filters {
+  gap: 40px;
+}
+.eventsDisplay {
+  display: grid;
+  grid-template: auto / 400px 400px 400px;
+  column-gap: 22px;
+  row-gap: 40px;
+  justify-content: center;
+  margin-top: 80px;
+}
+
+.datePickerContainer {
+  border: none;
+  font-size: 20px;
+  font-family: "Stolzl";
+  color: black !important;
+}
+.customDateWrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  background: transparent;
+  padding: 0;
+}
+
+.dateText {
+  font-size: 20px;
+  color: #000;
+  font-family: inherit;
+}
+
+.arrowIcon {
+  width: 15px;
+  height: auto;
+  transition: transform 0.2s;
+}
+.searchWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 820px;
+}
+.searchButton {
+  position: absolute;
+  right: 0;
+  width: 70px;
+  height: 50px;
+  background-color: #f08a32;
+  border: 1px solid black;
+  border-radius: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+.searchButton:hover {
+  transform: scale(1.05);
+}
+.searchButton img {
+  width: 30px;
+  height: 30px;
+}
+.clearAll {
+  color: #ed7c30;
+  margin: 0;
+  cursor: pointer;
+}
+.clearAll:hover {
+  font-weight: 500;
+  text-decoration: underline;
+}
+.notFound {
+  display: flex;
+  flex-direction: column;
+  max-width: 400px;
+  margin: 80px auto;
+  color: #ed7c30;
+  font-size: 24px;
+}
+.notFound img {
+  width: 64px;
+}
+.notFound h1 {
+  margin: 0;
+  font-size: 40px;
+}
+.notFound p {
+  margin: 10px 0;
+}
+@media(max-width:768px){
+  .searchFilter,
+  .searchWrapper,
+  .filters,
+  .eventsDisplay {
+    max-width: 620px;
+  }
+  .searchBar{
+    font-size: 22px;
+  }
+  .eventsDisplay {
+    grid-template: auto / 294px 294px;
+    column-gap:20px;
+    row-gap: 30px;
+    justify-content: center;
+    margin: 0 auto;
+  }
+  .searchFilter{
+    align-items: center;
+    margin: 56px auto;
+  }
+  .filters{
+    gap:15px;
+    flex-wrap: wrap;
+  }
+  .dateText{
+    font-size: 16px;
+  }
+
+}
+@media (max-width: 480px) {
+  .searchFilter,
+  .searchWrapper,
+  .filters,
+  .eventsDisplay {
+    max-width: 240px;
+  }
+  .searchBar {
+    font-size: 16px;
+  }
+  .searchWrapper img {
+    width: 20px;
+    height: 20px;
+  }
+  .filters {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .eventsDisplay {
+    grid-template: auto / 240px;
+    column-gap:0;
+    row-gap: 20px;
+    justify-content: center;
+    margin: 0 auto;
+  }
+  .searchFilter{
+    align-items: center;
+    margin: 56px auto;
+    margin-bottom: 30px;
+  }
+  .notFound{
+    max-width: 240px;
+    font-size: 16px;
+  }
+  .notFound h1 {
+    font-size: 22px;
+  }
+  .notFound img {
+    width: 40px;
+  }
+}

@@ -19,3 +19,11 @@ body {
   margin: 0;
   padding: 0;
 }
+.react-datepicker-wrapper{
+   display: flex !important;
+   align-items: center !important;
+   
+}
+.css-tj5bde-Svg{
+  fill: black !important;
+}

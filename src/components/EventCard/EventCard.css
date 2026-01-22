@@ -18,6 +18,7 @@
 }
 .event-card-image{
     width: 22.4375rem;
+    height: 240px;
     margin-bottom:1.25rem;
 }
 .event-card-image img{
@@ -37,6 +38,7 @@
 }
 .event-card-text-link-container{
     display: flex;
+    flex-grow: 1;
     align-items: flex-end;
     justify-content: space-between;
 }
@@ -46,6 +48,9 @@
     padding: 0.4375rem;
     border-radius: 50%;
     background-color: #ED7C30;
+}
+.event-link-button:hover {
+  transform: scale(1.05);
 }
 
 @media(max-width: 768px){
