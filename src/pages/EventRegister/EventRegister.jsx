@@ -25,7 +25,7 @@ export default function EventRegister() {
   const [participants, setParticipants] = useState([]);
   const [organizerProfile, setOrganizerProfile] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isRegistered, setIsRegistered] = useState(null);
+  const [isRegistered, setIsRegistered] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [cancelModal, setCancelModal] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -37,10 +37,12 @@ export default function EventRegister() {
     return categories.find((cat) => cat.id === categoryId);
   };
 
-  useEffect(() => {
+ useEffect(() => {
+    let isMounted = true; 
+
     const fetchData = async () => {
       const token = getToken();
-
+      setLoading(true);
       try {
         const [eventData, userdata, participantsData] = await Promise.all([
           getEventById(eventId, token),
@@ -48,40 +50,34 @@ export default function EventRegister() {
           getEventParticipants(eventId, token),
         ]);
 
-        setEvent(eventData);
-        setParticipants(participantsData);
-        setUserData(userdata);
-        const isUserInList = participantsData.some(
-          (p) => String(p.userId) === String(userId),
-        );
-        setIsRegistered(isUserInList);
+        if (isMounted) {
+          setEvent(eventData);
+          setParticipants(participantsData);
+          setUserData(userdata);
 
-        if (eventData.organizerId) {
-          try {
-            const profile = await getUserProfileSummary(
-              eventData.organizerId,
-              token,
-            );
+          const isUserInList = participantsData.some(
+            (p) => String(p.userId) === String(userId)
+          );
+          setIsRegistered(isUserInList);
+
+          if (eventData.organizerId) {
+            const profile = await getUserProfileSummary(eventData.organizerId, token);
             setOrganizerProfile(profile);
-          } catch (err) {
-            console.warn("Failed to load organizer profile:", err);
           }
         }
       } catch (err) {
-        console.error(err);
-
-        setError("Не вдалося завантажити дані.");
+        if (isMounted) setError("Не вдалося завантажити дані.");
       } finally {
-        setLoading(false);
+        if (isMounted) setLoading(false);
       }
     };
 
     fetchData();
-  }, [eventId]);
+    return () => { isMounted = false; }; 
+  }, [eventId, userId]);
 
   const canRegister = (user, event) => {
     if (!user || !event) {
-      setError("Реєстрація неможлива: немає даних про юзера або івент");
       return false;
     }
 
