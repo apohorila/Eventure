@@ -13,7 +13,7 @@ const CustomDateInput = React.forwardRef(
     <div className={styles.customDateWrapper} onClick={onClick} ref={ref}>
       <span className={styles.dateText}>{value ? value : placeholder}</span>
       <img
-        src="./assets/icons/down-arrow.png"
+        src="/assets/icons/down-arrow.png"
         alt="arrow"
         className={styles.arrowIcon}
       />
@@ -25,7 +25,7 @@ const customArrow = (props) => {
   return (
     <div {...props.innerProps} style={{ cursor: "pointer", display: "flex" }}>
       <img
-        src="./assets/icons/down-arrow.png"
+        src="/assets/icons/down-arrow.png"
         alt="down arrow"
         style={{ width: "15px", height: "15px", marginLeft: "5px" }}
       />
@@ -225,7 +225,7 @@ export default function EventSearch() {
               handleFilterChange("search", tempSearch);
             }}
           >
-            <img src="./public/assets/icons/search.png" />
+            <img src="/assets/icons/search.png" />
           </button>
         </div>
         <div className={styles.filters}>
@@ -315,6 +315,7 @@ export default function EventSearch() {
            (
             <EventCard
               key={event.id}
+              id={event.id}
               title={event.title}
               imageUrl={event.banner_photo_url}
               location={event.location}
@@ -322,7 +323,7 @@ export default function EventSearch() {
             />
           )
         )}</div>):(<div className={styles.notFound}>
-          <img src="./assets/icons/eyes.png"/>
+          <img src="/assets/icons/eyes.png"/>
           <h1>Отакої!</h1>
           <p>На жаль за вашим запитом не знайдено івентів.Спробуйте застосувати інші фільтри або очистити пошук.</p>
           </div>)}

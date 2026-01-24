@@ -51,6 +51,10 @@ export default function EventRegister() {
         setEvent(eventData);
         setParticipants(participantsData);
         setUserData(userdata);
+        const isUserInList = participantsData.some(
+          (p) => String(p.userId) === String(userId),
+        );
+        setIsRegistered(isUserInList);
 
         if (eventData.organizerId) {
           try {
@@ -71,10 +75,6 @@ export default function EventRegister() {
         setLoading(false);
       }
     };
-    const isUserInList = participants.some(
-      (p) => String(p.userId) === String(userId),
-    );
-    setIsRegistered(isUserInList);
 
     fetchData();
   }, [eventId]);
@@ -269,7 +269,7 @@ export default function EventRegister() {
                       const token = getToken();
                       await unregisterFromEvent(eventId, token);
                       setCancelModal(false);
-                      setIsRegistered(false)
+                      setIsRegistered(false);
                     }}
                   >
                     Скасувати
