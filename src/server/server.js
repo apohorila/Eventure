@@ -247,6 +247,35 @@ this.get("/events", () => {
     ]
   return events;
 });
+this.get("/events/:id", (schema, request) => {
+  const eventId = request.params.id; 
+
+  console.log("Mirage отримав запит для профілю з ID:", profileId);
+
+  return {
+      id: eventId, organizer_id: 42, title: "Гольф для початківців", description: "Вступний урок на професійному полі.",
+      status: "ACTIVE", event_date: "2026-06-15T10:00:00Z", max_participants: 8,
+      category_id: 3, banner_photo_url: "https://picsum.photos/seed/golf/600/400",
+      location: "Київ", min_age: 31, max_age: 100, required_gender: "ANY", chat_link: "https://t.me/golf_club"
+    };
+});
+this.post("/events/:eventId/register", (schema, request) => {
+  const { eventId } = request.params;
+  console.log(`Mirage: Створення реєстрації на івент ${eventId}`);
+  
+  return {
+    id: Math.floor(Math.random() * 1000),
+    eventId: Number(eventId),
+    userId: 1, // Імітуємо ID поточного юзера
+    status: "PENDING"
+  };
+});
+this.delete("/events/:eventId/register", (schema, request) => {
+  const { eventId } = request.params;
+  console.log(`Mirage: Видалення реєстрації для івенту ${eventId}`);
+  
+  return new Response(204); // Успішно видалено, без контенту
+});
     },
   })
 }

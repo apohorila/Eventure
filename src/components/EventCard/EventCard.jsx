@@ -16,7 +16,7 @@ export default function EventCard({ id, imageUrl, title, date, location }) {
           <span className="city">{location}</span>
         </div>
 
-        <Link to={`/events/${id}`} className="event-link-button">
+        <Link to={`/events/${id}/dashboard`} className="event-link-button">
           <img src="/assets/icons/right-arrow.png" alt="Go to event" />
         </Link>
       </div>

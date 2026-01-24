@@ -17,6 +17,7 @@ import EventSearch from "./pages/EventSearch/EventSearch.jsx";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage/ForgotPasswordPage.jsx";
 import ResetPasswordPage from "./pages/ResetPasswordPage/ResetPasswordPage.jsx";
 import EventDashboard from "./pages/EventDashboard/EventDashboard.jsx";
+import EventRegister from "./pages/EventRegister/EventRegister.jsx";
 
 function App() {
   return (
@@ -75,14 +76,21 @@ function App() {
               }
             />
             <Route
-              path="/search-events"
+              path="/events"
               element={
                 <PrivateRoute>
                   <EventSearch />
                 </PrivateRoute>
               }
             />
-
+            <Route
+              path="/events/:eventId/dashboard"
+              element={
+                <PrivateRoute>
+                  <EventRegister />
+                </PrivateRoute>
+              }
+            />
             <Route path="/forgot-password" element={<ForgotPasswordPage />} />
             <Route path="/reset-password" element={<ResetPasswordPage />} />
             <Route
@@ -93,6 +101,7 @@ function App() {
                 </PrivateRoute>
               }
             />
+            
 
             {/* <Route path="/my-events" element={<MyEvents />} />
         <Route path="/registered" element={<Registered />} />

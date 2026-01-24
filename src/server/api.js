@@ -194,16 +194,18 @@ export async function getUserProfile(userId, token) {
       },
     });
 
-    if (!response.ok) throw new Error("Failed to fetch profile");
+    if (!response.ok) throw new Error("Failed to fetch profile summary");
 
     const data = await response.json();
+    const processedData = toCamelCase(data);
+    console.log("Дані з Mirage:", data);
+    console.log("Дані після CamelCase:", processedData);
     return toCamelCase(data);
   } catch (error) {
     console.warn("getUserProfile: Використовуються тестові дані.", error);
-    return { ...MOCK_PROFILE, userId };
+    return {...MOCK_PROFILE,userId}
   }
 }
-
 export async function getUserProfileSummary(userId, token) {
   try {
     const response = await fetch(
@@ -270,6 +272,29 @@ export async function getEventById(eventId, token) {
     };
   }
 }
+export const registerForEvent = async (eventId, token) => {
+  const response = await fetch(`${API_BASE_URL}/v1/events/${eventId}/register`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${token}`
+    }
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.message || "Failed to register");
+  }
+  return await response.json();
+};
+export const unregisterFromEvent = async (eventId, token) => {
+  const response = await fetch(`${API_BASE_URL}/v1/events/${eventId}/register`, { 
+    method: "DELETE",
+    headers: { "Authorization": `Bearer ${token}` }
+  });
+  if (!response.ok) throw new Error("Не вдалося скасувати реєстрацію");
+  return true;
+};
 
 export async function getEventParticipants(eventId, token) {
   try {
