@@ -203,6 +203,7 @@ export async function getUserProfile(userId, token) {
     return toCamelCase(data);
   } catch (error) {
     console.warn("getUserProfile: Використовуються тестові дані.", error);
+    return {...MOCK_PROFILE,userId}
   }
 }
 export async function getUserProfileSummary(userId, token) {

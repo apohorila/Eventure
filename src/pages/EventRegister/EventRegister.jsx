@@ -31,6 +31,7 @@ export default function EventRegister() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+
   const getToken = () => sessionStorage.getItem("access_token");
 
   const getCategoryById = (categoryId) => {
@@ -39,9 +40,8 @@ export default function EventRegister() {
 
  useEffect(() => {
     let isMounted = true; 
-
+    const token = getToken()
     const fetchData = async () => {
-      const token = getToken();
       setLoading(true);
       try {
         const [eventData, userdata, participantsData] = await Promise.all([
@@ -122,6 +122,7 @@ export default function EventRegister() {
       setIsSubmitting(false);
     }
   };
+  console.log(userData)
 
   if (error) {
     return (
