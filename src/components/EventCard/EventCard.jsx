@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 import "./EventCard.css";
 import formatDate from "../../utils/utils";
 
@@ -9,7 +10,14 @@ export default function EventCard({
   title,
   date,
   location,
+  organizerId
 }) {
+  const {user}=useAuth()
+  const isOrganizer = Number(user.id) === Number(organizerId)
+  const isPast = new Date(date) < new Date();
+  const detailsPath = isOrganizer 
+    ? `/my-events/${id}/dashboard` 
+    : `/events/${id}/dashboard`;
   return (
     <div className="event-card-container">
       <div className="event-card-image">
@@ -22,7 +30,7 @@ export default function EventCard({
           <span className="city">{location}</span>
         </div>
 
-        <Link to={`/events/${id}/dashboard`} className="event-link-button">
+        <Link to={detailsPath} className="event-link-button">
           <img src="/assets/icons/right-arrow.png" alt="Go to event" />
         </Link>
       </div>

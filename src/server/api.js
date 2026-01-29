@@ -407,3 +407,28 @@ export async function changeParticipantStatus(eventId, userId, status, token) {
     return true;
   }
 }
+
+export async function getEventsArchive(userId,token, type){
+  try{
+    let url= `${API_BASE_URL}/v1/events/archive?userId=${userId}`
+    if (type){
+      url+= `&type=${type}`
+    }
+    const response = await fetch(url,
+     { method: "GET",
+      headers: {
+        "Content-Type" : "application/json",
+        ...(token&&{"AUthorization": `Bearer ${token}`})
+      }
+     }
+    )
+    if (!response.ok){
+      throw("Couldn't fetch data")
+    }
+    const data = await response.json()
+    return toCamelCase(data)
+  }catch(err){
+    console.error("Couldn't fetch", err)
+    return []
+  }
+}
