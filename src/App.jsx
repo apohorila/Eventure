@@ -103,7 +103,14 @@ function App() {
                 </PrivateRoute>
               }
             />
-            <Route path="/my-events" element={<MyEvents />} />
+            <Route
+              path="/my-events"
+              element={
+                <PrivateRoute>
+                  <MyEvents />
+                </PrivateRoute>
+              }
+            />
 
             {/* <Route path="/my-events" element={<MyEvents />} />
         <Route path="/registered" element={<Registered />} />

@@ -459,17 +459,13 @@ export async function changeParticipantStatus(eventId, userId, status, token) {
 
 export async function getCreatedEvents(userId, token) {
   try {
-    const response = await fetch(
-      `${API_BASE_URL}/v1/events?organizerId=${userId}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          ...(token && { Authorization: `Bearer ${token}` }),
-        },
+    const response = await fetch(`${API_BASE_URL}/v1/events/user/${userId}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        ...(token && { Authorization: `Bearer ${token}` }),
       },
-    );
-
+    });
     if (!response.ok) throw new Error("Failed to fetch created events");
 
     const data = await response.json();
@@ -487,6 +483,6 @@ export async function getCreatedEvents(userId, token) {
       return MOCK_EVENTS_DB.filter((e) => e.organizerId === 1);
     }
 
-    return null;
+    return myEvents;
   }
 }
