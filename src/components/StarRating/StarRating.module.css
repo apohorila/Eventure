@@ -1,0 +1,10 @@
+.radioInput{
+    display: none;
+}
+.starImg{
+    width: 30px;
+}
+.starRating{
+    display: flex;
+    gap:5px;
+}

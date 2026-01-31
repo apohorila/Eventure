@@ -43,16 +43,16 @@ const unstyledStyles = {
     maxWidth: "400px",
     cursor: "pointer",
     fontSize: "20px",
-    '@media only screen and (min-width: 480px)': {
-      ...base['@media only screen and (min-width: 480px)'],
-      fontSize: '16px',
-      minHeight: '40px',
+    "@media only screen and (min-width: 480px)": {
+      ...base["@media only screen and (min-width: 480px)"],
+      fontSize: "16px",
+      minHeight: "40px",
       maxWidth: "240px",
     },
-    '@media only screen and (min-width: 768px)': {
-      ...base['@media only screen and (min-width: 768px)'],
-      fontSize: '18px',
-      minHeight: '45px',
+    "@media only screen and (min-width: 768px)": {
+      ...base["@media only screen and (min-width: 768px)"],
+      fontSize: "18px",
+      minHeight: "45px",
     },
   }),
   indicatorSeparator: () => ({
@@ -295,38 +295,49 @@ export default function EventSearch() {
             }}
           />
         </div>
-        {searchParams.toString().length > 0 ? <p
-          className={styles.clearAll}
-          onClick={() => {
-            setSearchParams({});
-            if (setTempSearch) {
-              setTempSearch("");
-            }
-          }}
-        >
-          Очистити всі фільтри
-        </p>:""}
+        {searchParams.toString().length > 0 ? (
+          <p
+            className={styles.clearAll}
+            onClick={() => {
+              setSearchParams({});
+              if (setTempSearch) {
+                setTempSearch("");
+              }
+            }}
+          >
+            Очистити всі фільтри
+          </p>
+        ) : (
+          ""
+        )}
       </section>
       <section className={styles.eventsSection}>
         <div className={styles.eventsContainer}></div>
       </section>
-      <section >
-        {displayedEvents.length>0? (<div className={styles.eventsDisplay}>{displayedEvents.map((event) =>
-           (
-            <EventCard
-              key={event.id}
-              id={event.id}
-              title={event.title}
-              imageUrl={event.banner_photo_url}
-              location={event.location}
-              date={event.event_date}
-            />
-          )
-        )}</div>):(<div className={styles.notFound}>
-          <img src="/assets/icons/eyes.png"/>
-          <h1>Отакої!</h1>
-          <p>На жаль за вашим запитом не знайдено івентів.Спробуйте застосувати інші фільтри або очистити пошук.</p>
-          </div>)}
+      <section>
+        {displayedEvents.length > 0 ? (
+          <div className={styles.eventsDisplay}>
+            {displayedEvents.map((event) => (
+              <EventCard
+                key={event.id}
+                id={event.id}
+                title={event.title}
+                bannerPhotoUrl={event.banner_photo_url}
+                location={event.location}
+                date={event.event_date}
+              />
+            ))}
+          </div>
+        ) : (
+          <div className={styles.notFound}>
+            <img src="/assets/icons/eyes.png" />
+            <h1>Отакої!</h1>
+            <p>
+              На жаль за вашим запитом не знайдено івентів.Спробуйте застосувати
+              інші фільтри або очистити пошук.
+            </p>
+          </div>
+        )}
       </section>
     </main>
   );

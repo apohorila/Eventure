@@ -4,6 +4,15 @@
     align-items: center;
      
 }
+.event-swiper {
+    position: relative;
+    padding-bottom: 2rem; 
+}
+
+.swiper-nav-buttons {
+    z-index: 10;
+    position: relative;
+}
 .swiper-nav-buttons button{
     background: none;
     border: none;
@@ -13,9 +22,18 @@
 .swiper-nav-buttons img {
     width: 3rem;
 }
+.swiper-wrapper{
+    height: fit-content;
+    
+}
 
 
-
+@media(max-width:768px){
+    .swiper-wrapper{
+    height: fit-content;
+    padding-bottom: 2px;
+}
+}
 @media (max-width:480px){
     .swiper-nav-buttons, .swiper-slide, .swiper-slide-active .swiper-initialized,.swiper-horizontal,.swiper-backface-hidden,.event-swiper    
      {

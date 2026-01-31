@@ -14,21 +14,66 @@ const MOCK_HOME_DATA = {
       title: "Code & Coffee",
       eventDate: "2026-06-10T09:00:00.000Z",
       location: "Львів",
-      imageUrl: "https://placehold.co/400x250/orange/white?text=Code+Coffee",
+      bannerPhotoUrl:
+        "https://placehold.co/400x250/orange/white?text=Code+Coffee",
     },
     {
       id: 2,
       title: "Вечір Настілок",
       eventDate: "2026-06-15T18:30:00.000Z",
       location: "Івано-Франківськ",
-      imageUrl: "https://placehold.co/400x250/purple/white?text=Board+Games",
+      bannerPhotoUrl:
+        "https://placehold.co/400x250/purple/white?text=Board+Games",
     },
     {
       id: 3,
       title: "Забіг",
       eventDate: "2026-07-04T21:00:00.000Z",
       location: "Дніпро",
-      imageUrl: "https://placehold.co/400x250/blue/white?text=Night+Run",
+      bannerPhotoUrl: "https://placehold.co/400x250/blue/white?text=Night+Run",
+    },
+    {
+      id: 4,
+      title: "Стріт-Арт Тур",
+      eventDate: "2026-07-22T11:00:00.000Z",
+      location: "Харків",
+      bannerPhotoUrl: "https://placehold.co/400x250/green/white?text=Art+Tour",
+    },
+    {
+      id: 5,
+      title: "Pitch Day",
+      eventDate: "2026-08-12T14:00:00.000Z",
+      location: "Київ",
+      bannerPhotoUrl: "https://placehold.co/400x250/red/white?text=Pitch+Day",
+    },
+    {
+      id: 6,
+      title: "Йога в парку",
+      eventDate: "2026-09-01T08:00:00.000Z",
+      location: "Чернігів",
+      bannerPhotoUrl: "https://placehold.co/400x250/teal/white?text=Yoga",
+    },
+    {
+      id: 7,
+      title: "Кіно просто неба",
+      eventDate: "2026-09-15T20:00:00.000Z",
+      location: "Малин",
+      bannerPhotoUrl:
+        "https://placehold.co/400x250/black/white?text=Open+Air+Cinema",
+    },
+    {
+      id: 8,
+      title: "Книжковий клуб",
+      eventDate: "2026-10-05T18:00:00.000Z",
+      location: "Донецьк",
+      bannerPhotoUrl: "https://placehold.co/400x250/brown/white?text=Book+Club",
+    },
+    {
+      id: 9,
+      title: "New Year Party",
+      eventDate: "2026-12-31T22:00:00.000Z",
+      location: "Чернівці",
+      bannerPhotoUrl: "https://placehold.co/400x250/gold/white?text=NY+Party",
     },
   ],
   categories: MOCK_CATEGORIES,
@@ -300,12 +345,12 @@ export async function getUserProfile(userId, token) {
       },
     });
 
-    if (!response.ok) throw new Error("Failed to fetch profile summary");
+    if (!response.ok) throw new Error("Failed to fetch profile");
 
     const data = await response.json();
-    const processedData = toCamelCase(data);
-    console.log("Дані з Mirage:", data);
-    console.log("Дані після CamelCase:", processedData);
+    // const processedData = toCamelCase(data);
+    // console.log("Дані з Mirage:", data);
+    // console.log("Дані після CamelCase:", processedData);
     return toCamelCase(data);
   } catch (error) {
     console.warn("getUserProfile: Використовуються тестові дані.", error);
@@ -376,6 +421,29 @@ export async function getEventById(eventId, token) {
       id: Number(eventId),
       categoryName: getCategoryName(mockData.categoryId),
     };
+  }
+}
+export async function getEventsByOrganizer(organizerId, token) {
+  try {
+    const response = await fetch(
+      `${API_BASE_URL}/v1/events?organizerId=${organizerId}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          ...(token && { Authorization: `Bearer ${token}` }),
+        },
+      },
+    );
+
+    if (!response.ok) throw new Error("Failed to fetch organizer events");
+
+    const data = await response.json();
+    console.log(data);
+    return toCamelCase(data);
+  } catch (error) {
+    console.error("Помилка при отриманні івентів організатора:", error);
+    return [];
   }
 }
 export const registerForEvent = async (eventId, token) => {
@@ -484,5 +552,28 @@ export async function getCreatedEvents(userId, token) {
     }
 
     return myEvents;
+  }
+}
+export async function getEventsArchive(userId, token, type) {
+  try {
+    let url = `${API_BASE_URL}/v1/events/archive?userId=${userId}`;
+    if (type) {
+      url += `&type=${type}`;
+    }
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        ...(token && { AUthorization: `Bearer ${token}` }),
+      },
+    });
+    if (!response.ok) {
+      throw "Couldn't fetch data";
+    }
+    const data = await response.json();
+    return toCamelCase(data);
+  } catch (err) {
+    console.error("Couldn't fetch", err);
+    return [];
   }
 }

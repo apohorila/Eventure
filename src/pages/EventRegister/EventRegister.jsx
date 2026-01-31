@@ -11,6 +11,7 @@ import {
 import { useAuth } from "../../context/AuthContext";
 import { useCategories } from "../../context/CategoryContext";
 import EventCategory from "../../components/EventCategory/EventCategory";
+import RatingModal from "../../components/RatingModal/RatingModal";
 import styles from "./EventRegister.module.css";
 
 export default function EventRegister() {
@@ -28,9 +29,9 @@ export default function EventRegister() {
   const [isRegistered, setIsRegistered] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [cancelModal, setCancelModal] = useState(false);
+  const [rateModal, setRateModal] = useState(true);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
 
   const getToken = () => sessionStorage.getItem("access_token");
 
@@ -38,11 +39,11 @@ export default function EventRegister() {
     return categories.find((cat) => cat.id === categoryId);
   };
 
- useEffect(() => {
-    let isMounted = true; 
-   
+  useEffect(() => {
+    let isMounted = true;
+
     const fetchData = async () => {
-    const token = getToken()
+      const token = getToken();
       setLoading(true);
       try {
         const [eventData, userdata, participantsData] = await Promise.all([
@@ -57,12 +58,15 @@ export default function EventRegister() {
           setUserData(userdata);
 
           const isUserInList = participantsData.some(
-            (p) => String(p.userId) === String(userId)
+            (p) => String(p.userId) === String(userId),
           );
           setIsRegistered(isUserInList);
 
           if (eventData.organizerId) {
-            const profile = await getUserProfileSummary(eventData.organizerId, token);
+            const profile = await getUserProfileSummary(
+              eventData.organizerId,
+              token,
+            );
             setOrganizerProfile(profile);
           }
         }
@@ -74,8 +78,11 @@ export default function EventRegister() {
     };
 
     fetchData();
-    return () => { isMounted = false; }; 
+    return () => {
+      isMounted = false;
+    };
   }, [eventId, userId]);
+
 
   const canRegister = (user, event) => {
     if (!user || !event) {
@@ -123,7 +130,7 @@ export default function EventRegister() {
       setIsSubmitting(false);
     }
   };
-  console.log(userData)
+  console.log(userData);
 
   if (error) {
     return (
@@ -144,6 +151,9 @@ export default function EventRegister() {
   const eventCategory = event?.categoryId
     ? getCategoryById(event.categoryId)
     : null;
+
+  const isPast = new Date(event.eventDate) < new Date();
+
 
   return (
     <div className={styles.container}>
@@ -209,15 +219,21 @@ export default function EventRegister() {
                 </span>
               </div>
             </div>
-            {isFull ? (
+            {isPast ? (
               <p className={styles.forbidden}>
-                На жаль,всі місця на івент зайняті.
-                <br>Спробуйте заглянути пізніше </br>{" "}
+                Цей івент уже відбувся. Реєстрація закрита.
+              </p>
+            ) : isFull ? (
+              <p className={styles.forbidden}>
+                На жаль, всі місця на івент зайняті.
+                <br />
+                Спробуйте заглянути пізніше
               </p>
             ) : isEligible ? (
               <button
                 className={`${styles.buttonLink} ${isRegistered ? styles.unregisterBtn : styles.buttonLink} ${isSubmitting ? styles.submittingBtn : ""}`}
                 onClick={handleToggleRegistration}
+                disabled={isSubmitting}
               >
                 {isSubmitting
                   ? "Зачекайте..."
@@ -274,6 +290,15 @@ export default function EventRegister() {
                   </button>
                 </div>
               </div>
+            )}
+            {isPast && rateModal && (
+              <RatingModal
+                eventId={event.id}
+                userId={userId}
+                eventTitle={event.title}
+                onClose={() => setRateModal(false)}
+                className={styles.modalOverlay}
+              />
             )}
 
             <div

@@ -313,6 +313,9 @@
     font-size: 14px;
     padding: 8px;
   }
+   .forbidden{
+    font-size: 16px;
+  }
 }
 
 @media (max-width: 420px) {
@@ -397,6 +400,9 @@
     max-width: 240px;
   }
   .modalWindow h3 {
+    font-size: 14px;
+  }
+  .forbidden{
     font-size: 14px;
   }
 }

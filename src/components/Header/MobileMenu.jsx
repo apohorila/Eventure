@@ -42,7 +42,7 @@ const MobileMenu = ({ open, onClose }) => {
         {isAuthenticated ? (
           <>
             <Link
-              to="/profile"
+              to={`/profile/${user.id}`}
               className={styles.profileCard}
               onClick={onClose}
             >
