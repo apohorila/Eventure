@@ -91,7 +91,7 @@ const EditProfile = () => {
       );
 
       if (response.ok) {
-        navigate("/profile");
+        navigate(`/profile/${userId}`);
       }
     } catch (error) {
       console.error("Помилка:", error);

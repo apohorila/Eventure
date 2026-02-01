@@ -283,13 +283,17 @@
     .eventsSection{
         padding: 0;
     }
-    .eventsSection h2 {
+    .eventsSection .title {
         font-size: 22px;
         text-align: center;
         font-weight: 500;
         width: 100%;
+        margin: 20px 0;
     }
     .events h2 {
+        font-size: 14px;
+    }
+    .events p{
         font-size: 14px;
     }
     .rate{

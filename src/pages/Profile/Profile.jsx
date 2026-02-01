@@ -211,7 +211,7 @@ export default function Profile() {
         </div>
       </section>
       {!isOwner && <section className={styles.eventsSection}>
-        <h2>Заплановані івенти</h2>
+        <h2 className={styles.title}>Заплановані івенти</h2>
         <div className={styles.events}>{
             userEvents.length > 0 ?
             <EventCarousel events={userEvents} />
