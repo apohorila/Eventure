@@ -12,7 +12,7 @@ export function makeServer() {
         events: [
           {
             id: 1,
-            organizer_id: 999,
+            organizer_id: 1,
             title: "Турнір з робототехніки",
             description: "Змагання саморобних роботів серед школярів.",
             status: "ACTIVE",
@@ -28,7 +28,7 @@ export function makeServer() {
           },
           {
             id: 2,
-            organizer_id: 999,
+            organizer_id: 1,
             title: "Малювання коміксів",
             description: "Майстер-клас з ілюстрації для підлітків.",
             status: "ACTIVE",
@@ -53,18 +53,18 @@ export function makeServer() {
             category_id: 3,
             banner_photo_url: "https://picsum.photos/seed/football_jr/600/400",
             location: "Одеса",
-            min_age: 10,
-            max_age: 16,
+            min_age: 17,
+            max_age: 20,
             required_gender: "MALE",
             chat_link: "https://t.me/foot_jr",
           },
           {
             id: 4,
-            organizer_id: 20,
+            organizer_id: 1,
             title: "Студентський Хакатон",
             description: "24 години кодингу та створення крутих проєктів.",
             status: "ACTIVE",
-            event_date: "2026-05-20T10:00:00Z",
+            event_date: "2026-01-20T10:00:00Z",
             max_participants: 50,
             category_id: 1,
             banner_photo_url: "https://picsum.photos/seed/hack/600/400",
@@ -117,18 +117,18 @@ export function makeServer() {
             category_id: 1,
             banner_photo_url: "https://picsum.photos/seed/it_meet/600/400",
             location: "Київ",
-            min_age: 26,
+            min_age: 18,
             max_age: 30,
             required_gender: "ANY",
             chat_link: "https://t.me/pm_talks",
           },
           {
             id: 8,
-            organizer_id: 31,
+            organizer_id: 1,
             title: "Винний вечір: Сомельє-клас",
             description: "Вчимося розрізняти нотки винограду професійно.",
             status: "ACTIVE",
-            event_date: "2026-06-03T19:30:00Z",
+            event_date: "2026-01-03T19:30:00Z",
             max_participants: 10,
             category_id: 4,
             banner_photo_url: "https://picsum.photos/seed/wine/600/400",
@@ -197,19 +197,21 @@ export function makeServer() {
             category_id: 3,
             banner_photo_url: "https://picsum.photos/seed/golf/600/400",
             location: "Київ",
-            min_age: 31,
+            min_age: 18,
             max_age: 100,
             required_gender: "ANY",
             chat_link: "https://t.me/golf_club",
           },
         ],
         eventParticipants: [
-          { userId: 999, eventId: 5, registrationStatus: "CONFIRMED" }, // Юзер 999 ходив на івент 2
-          { userId: 999, eventId: 6, registrationStatus: "CONFIRMED" },
+          { userId: 1, eventId: 5, registrationStatus: "CONFIRMED" }, // Юзер 1 ходив на івент 2
+          { userId: 1, eventId: 6, registrationStatus: "CONFIRMED" },
+          { userId: 1, eventId: 3, registrationStatus: "APPROVED" },
+          { userId: 1, eventId: 12, registrationStatus: "APPROVED" },
         ],
         profiles: [
           {
-            id: 10,
+            id: 1,
             firstName: "Іван",
             lastName: "Іванов",
             email: "ivanivanov@gmail.com",
@@ -327,9 +329,10 @@ export function makeServer() {
         }
 
         // Повертаємо результат (можна додати сортування від нових до старих)
-        return finalResults.sort(
-          (a, b) => new Date(b.event_date) - new Date(a.event_date),
-        );
+        const now = new Date();
+        return finalResults
+          .filter((e) => new Date(e.event_date) < now)
+          .sort((a, b) => new Date(b.event_date) - new Date(a.event_date));
       });
 
       // PROFILES
@@ -433,6 +436,63 @@ export function makeServer() {
 
       this.delete("/events/:eventId/register", (schema, request) => {
         return new Response(204);
+      });
+
+      this.get("/events/my", (schema, request) => {
+        const currentUserId = 1;
+
+        const organizedEvents = schema.db.events.where({
+          organizer_id: currentUserId,
+        });
+
+        const participationRecords = schema.db.eventParticipants.where({
+          userId: currentUserId,
+        });
+
+        const participantEventIds = participationRecords.map((p) =>
+          Number(p.eventId),
+        );
+        const attendedEvents = schema.db.events.filter((event) =>
+          participantEventIds.includes(Number(event.id)),
+        );
+
+        const allMyEvents = [...organizedEvents, ...attendedEvents];
+
+        const uniqueEvents = allMyEvents.filter(
+          (event, index, self) =>
+            index === self.findIndex((t) => t.id === event.id),
+        );
+
+        const now = new Date();
+        return uniqueEvents.filter((e) => new Date(e.event_date) > now);
+      });
+      this.get("/events/user/:userId", (schema, request) => {
+        const userId = request.params.userId;
+        const events = schema.db.events.where({ organizer_id: Number(userId) });
+
+        const now = new Date();
+        return events.filter((e) => new Date(e.event_date) > now);
+      });
+      this.get("/events/registrations", (schema, request) => {
+        const currentUserId = 1;
+        const status = request.queryParams.status; // "APPROVED"
+
+        let participationRecords = schema.db.eventParticipants.where({
+          userId: currentUserId,
+        });
+
+        if (status) {
+          participationRecords = participationRecords.filter(
+            (p) => p.registrationStatus === status,
+          );
+        }
+
+        const eventIds = participationRecords.map((p) => Number(p.eventId));
+        let events = schema.db.events.find(eventIds);
+        const now = new Date();
+        events = events.filter((e) => new Date(e.event_date) > now);
+
+        return events;
       });
     },
   });
