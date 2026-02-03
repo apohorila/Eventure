@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styles from "./Header.module.css";
 import MobileMenu from "./MobileMenu";
 import { useAuth } from "../../context/AuthContext";
@@ -7,7 +7,17 @@ import { useAuth } from "../../context/AuthContext";
 const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
+  const [searchValue, setSearchValue] = useState("");
   const { isAuthenticated } = useAuth();
+  const navigate = useNavigate();
+
+  const handleSearchSubmit = (e) => {
+    if (e.key === "Enter" && searchValue.trim()) {
+      navigate(`/events?search=${encodeURIComponent(searchValue.trim())}`);
+      setSearchOpen(false);
+      setSearchValue("");
+    }
+  };
 
   return (
     <>
@@ -49,7 +59,7 @@ const Header = () => {
           <span className={styles.city}>Київ</span>
         </div>
 
-        {searchOpen ? (
+        {isAuthenticated && searchOpen ? (
           <div className={styles.centerExpanded}>
             <div className={styles.searchBarContainer}>
               <button
@@ -77,7 +87,12 @@ const Header = () => {
                 placeholder="Пошук..."
                 className={styles.searchInputExpanded}
                 autoFocus
-                onBlur={() => setSearchOpen(false)}
+                value={searchValue}
+                onChange={(e) => setSearchValue(e.target.value)}
+                onKeyDown={handleSearchSubmit}
+                onBlur={() => {
+                  if (!searchValue) setSearchOpen(false);
+                }}
               />
               <div className={styles.searchIconInside}>
                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
@@ -109,7 +124,7 @@ const Header = () => {
         )}
 
         <div className={styles.right}>
-          {!searchOpen && (
+          {isAuthenticated && !searchOpen && (
             <button
               className={styles.searchIconTrigger}
               onClick={() => setSearchOpen(true)}

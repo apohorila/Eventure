@@ -58,7 +58,7 @@ export default function Home() {
             </Link>
           </div>
           <div className="home-page-img">
-            <img src="https://placehold.co/585x540" />
+            <img src="assets/home.png" />
           </div>
         </div>
       </section>

@@ -232,40 +232,46 @@ const MOCK_PROFILE = {
 
 const MOCK_PARTICIPANTS = [
   {
-    userId: 101,
+    id: 101,
+    userId: 1,
+    name: "Іван Іванов",
+    status: "APPROVED",
+  },
+  {
+    id: 101,
     name: "Олена Петрівна",
-    // avatarUrl: "https://randomuser.me/api/portraits/women/44.jpg",
+    picture: "https://randomuser.me/api/portraits/women/44.jpg",
     status: "PENDING",
   },
   {
-    userId: 102,
+    id: 102,
     name: "Максим Коваленко",
-    avatarUrl: null,
+    picture: null,
     status: "PENDING",
   },
   {
-    userId: 103,
-    name: "Анна Смик",
-    // avatarUrl: "https://randomuser.me/api/portraits/women/68.jpg",
-    status: "WAITING",
-  },
-  {
-    userId: 201,
+    id: 201,
     name: "Дмитро Бондаренко",
-    avatarUrl: "https://randomuser.me/api/portraits/men/32.jpg",
-    status: "APPROVED",
+    picture: "https://randomuser.me/api/portraits/men/32.jpg",
+    status: "PENDING",
   },
   {
-    userId: 202,
+    id: 202,
     name: "Вікторія",
-    avatarUrl: null,
+    picture: null,
     status: "APPROVED",
   },
   {
-    userId: 203,
+    id: 203,
     name: "Олексій",
-    avatarUrl: "https://randomuser.me/api/portraits/men/85.jpg",
+    picture: "https://randomuser.me/api/portraits/men/85.jpg",
     status: "APPROVED",
+  },
+  {
+    id: 105,
+    name: "Сергій",
+    picture: null,
+    status: "DENIED", // додав для тестування відхилених
   },
 ];
 
@@ -528,35 +534,6 @@ export async function changeParticipantStatus(eventId, userId, status, token) {
   }
 }
 
-export async function getCreatedEvents(userId, token) {
-  try {
-    const response = await fetch(`${API_BASE_URL}/v1/events/user/${userId}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        ...(token && { Authorization: `Bearer ${token}` }),
-      },
-    });
-    if (!response.ok) throw new Error("Failed to fetch created events");
-
-    const data = await response.json();
-    return toCamelCase(data);
-  } catch (error) {
-    console.warn("getCreatedEvents: Використовуються тестові дані.", error);
-
-    await new Promise((resolve) => setTimeout(resolve, 500));
-
-    const myEvents = MOCK_EVENTS_DB.filter(
-      (e) => e.organizerId === Number(userId),
-    );
-
-    if (myEvents.length === 0) {
-      return MOCK_EVENTS_DB.filter((e) => e.organizerId === 1);
-    }
-
-    return myEvents;
-  }
-}
 export async function getEventsArchive(userId, token, type) {
   try {
     let url = `${API_BASE_URL}/v1/events/archive?userId=${userId}`;
@@ -578,5 +555,96 @@ export async function getEventsArchive(userId, token, type) {
   } catch (err) {
     console.error("Couldn't fetch", err);
     return [];
+  }
+}
+export async function getAllEvents() {
+  try {
+    const response = await fetch(`${API_BASE_URL}/v1/events`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Server returned status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return toCamelCase(data);
+  } catch (error) {
+    console.warn(
+      "getAllEvents: Використовуються тестові дані (MOCK_EVENTS_DB).",
+      error,
+    );
+
+    await new Promise((resolve) => setTimeout(resolve, 300));
+
+    return toCamelCase(MOCK_EVENTS_DB);
+  }
+}
+
+export async function getCreatedEvents(userId, token) {
+  try {
+    const response = await fetch(`${API_BASE_URL}/v1/events/user/${userId}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        ...(token && { Authorization: `Bearer ${token}` }),
+      },
+    });
+    if (!response.ok) throw new Error("Failed to fetch created events");
+    const data = await response.json();
+    return toCamelCase(data);
+  } catch (error) {
+    const created = MOCK_EVENTS_DB.filter(
+      (e) => e.organizerId === Number(userId),
+    );
+    const result =
+      created.length > 0
+        ? created
+        : MOCK_EVENTS_DB.filter((e) => e.organizerId === 1);
+    return toCamelCase(result);
+  }
+}
+
+export async function getRegisteredEvents(status = "APPROVED", token) {
+  try {
+    const response = await fetch(
+      `${API_BASE_URL}/v1/events/registrations?status=${status}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
+    if (!response.ok) throw new Error("Failed to fetch registrations");
+    const data = await response.json();
+    return toCamelCase(data);
+  } catch (error) {
+    const registered = MOCK_EVENTS_DB.filter((e) => e.organizerId !== 1);
+    return toCamelCase(registered);
+  }
+}
+
+export async function getMyTotalEvents(token, status = "APPROVED") {
+  try {
+    const response = await fetch(
+      `${API_BASE_URL}/v1/events/my?status=${status}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
+    if (!response.ok) throw new Error("Failed to fetch my total events");
+    const data = await response.json();
+    return toCamelCase(data);
+  } catch (error) {
+    return toCamelCase(MOCK_EVENTS_DB);
   }
 }

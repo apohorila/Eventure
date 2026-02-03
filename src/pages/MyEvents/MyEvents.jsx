@@ -1,8 +1,13 @@
 import React, { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import EventCard from "../../components/EventCard/EventCard.jsx";
 import styles from "./MyEvents.module.css";
-import { getCreatedEvents } from "../../server/api";
 import { useAuth } from "../../context/AuthContext";
+import {
+  getCreatedEvents,
+  getRegisteredEvents,
+  getMyTotalEvents,
+} from "../../server/api.js";
 
 export default function MyEvents() {
   const [events, setEvents] = useState([]);
@@ -10,20 +15,28 @@ export default function MyEvents() {
   const [error, setError] = useState(null);
   const { user } = useAuth();
 
+  const [searchParams, setSearchParams] = useSearchParams();
+  const currentType = searchParams.get("type");
+
   useEffect(() => {
     if (!user) return;
 
     const fetchEvents = async () => {
       try {
         setLoading(true);
-
         const token = sessionStorage.getItem("access_token");
+        let data = [];
 
-        const data = await getCreatedEvents(user.id, token);
+        if (currentType === "created") {
+          data = await getCreatedEvents(user.id, token);
+        } else if (currentType === "attended") {
+          data = await getRegisteredEvents("APPROVED", token);
+        } else {
+          data = await getMyTotalEvents(token, "APPROVED");
+        }
 
         setEvents(data);
       } catch (err) {
-        console.error("Помилка завантаження подій:", err);
         setError("Не вдалося завантажити події");
       } finally {
         setLoading(false);
@@ -31,7 +44,7 @@ export default function MyEvents() {
     };
 
     fetchEvents();
-  }, [user]);
+  }, [user, currentType]);
 
   if (loading) return <div className={styles.pageWrapper}>Завантаження...</div>;
   if (error) return <div className={styles.pageWrapper}>{error}</div>;
@@ -39,6 +52,27 @@ export default function MyEvents() {
   return (
     <div className={styles.pageWrapper}>
       <h1 className={styles.pageTitle}>Мої івенти</h1>
+
+      <div className={styles.filters}>
+        <button
+          className={styles.filterBtn}
+          onClick={() => setSearchParams({})}
+        >
+          Всі
+        </button>
+        <button
+          className={styles.filterBtn}
+          onClick={() => setSearchParams({ type: "created" })}
+        >
+          Створені
+        </button>
+        <button
+          className={styles.filterBtn}
+          onClick={() => setSearchParams({ type: "attended" })}
+        >
+          Підтверджені
+        </button>
+      </div>
 
       {events.length > 0 ? (
         <div className={styles.eventsContainer}>
@@ -56,7 +90,7 @@ export default function MyEvents() {
           ))}
         </div>
       ) : (
-        <div className={styles.emptyState}>Ви ще не створили жодної події.</div>
+        <div className={styles.emptyState}>Тут поки що нічого немає.</div>
       )}
     </div>
   );

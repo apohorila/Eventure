@@ -7,6 +7,7 @@ import { format, parseISO } from "date-fns";
 import styles from "./EventSearch.module.css";
 import { useCategories } from "../../context/CategoryContext";
 import EventCard from "../../components/EventCard/EventCard";
+import { getAllEvents } from "../../server/api";
 
 const CustomDateInput = React.forwardRef(
   ({ value, onClick, placeholder }, ref) => (
@@ -97,18 +98,21 @@ export default function EventSearch() {
   useEffect(() => {
     async function fetchEvents() {
       try {
-        const res = await fetch("http://localhost:8080/api/v1/events");
-        if (res.ok) {
-          const data = await res.json();
-          setEvents(data);
-          console.log(data);
-        }
+        const data = await getAllEvents();
+        setEvents(data);
       } catch (err) {
         setError("Ой! Не вдалося завантажити івенти, спробуйте пізніше.");
       }
     }
     fetchEvents();
   }, []);
+
+  useEffect(() => {
+    const queryFromUrl = searchParams.get("search");
+    if (queryFromUrl !== null) {
+      setTempSearch(queryFromUrl);
+    }
+  }, [searchParams]);
 
   const AGE_OPTIONS = {
     under18: { label: "до 18", minAge: 10, maxAge: 17 },
@@ -182,19 +186,19 @@ export default function EventSearch() {
 
     const matchesCategory =
       categoryParams.length === 0 ||
-      categoryParams.includes(event.category_id.toString());
+      categoryParams.includes(event.categoryId?.toString());
 
-    const matchesAge = !maxAgeFilter || event.max_age == Number(maxAgeFilter);
+    const matchesAge = !maxAgeFilter || event.maxAge == Number(maxAgeFilter);
 
     const matchesParticipants =
       !maxParticipantsFilter ||
-      event.max_participants <= Number(maxParticipantsFilter);
+      event.maxParticipants <= Number(maxParticipantsFilter);
 
     const matchesLocation =
       !locationFilter ||
       event.location.toLowerCase() === locationFilter.toLowerCase();
 
-    const matchesDate = !dateFilter || event.event_date.startsWith(dateFilter);
+    const matchesDate = !dateFilter || event.eventDate?.startsWith(dateFilter);
 
     return (
       matchesCategory &&
@@ -216,8 +220,13 @@ export default function EventSearch() {
             type="text"
             className={styles.searchBar}
             placeholder="Ваш запит..."
+            value={tempSearch}
             onChange={(e) => setTempSearch(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter"}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                handleFilterChange("search", tempSearch);
+              }
+            }}
           />
           <button
             className={styles.searchButton}
@@ -225,7 +234,7 @@ export default function EventSearch() {
               handleFilterChange("search", tempSearch);
             }}
           >
-            <img src="/assets/icons/search.png" />
+            <img src="/assets/icons/search.png" alt="search" />
           </button>
         </div>
         <div className={styles.filters}>
@@ -281,7 +290,7 @@ export default function EventSearch() {
             }}
           />
           <Select
-            name="age"
+            name="participants"
             options={partcipantsOptions}
             className="basic-multi-select"
             styles={unstyledStyles}
@@ -300,9 +309,7 @@ export default function EventSearch() {
             className={styles.clearAll}
             onClick={() => {
               setSearchParams({});
-              if (setTempSearch) {
-                setTempSearch("");
-              }
+              setTempSearch("");
             }}
           >
             Очистити всі фільтри
@@ -322,19 +329,20 @@ export default function EventSearch() {
                 key={event.id}
                 id={event.id}
                 title={event.title}
-                bannerPhotoUrl={event.banner_photo_url}
+                bannerPhotoUrl={event.bannerPhotoUrl}
                 location={event.location}
-                date={event.event_date}
+                date={event.eventDate}
+                organizerId={event.organizerId}
               />
             ))}
           </div>
         ) : (
           <div className={styles.notFound}>
-            <img src="/assets/icons/eyes.png" />
+            <img src="/assets/icons/eyes.png" alt="not found" />
             <h1>Отакої!</h1>
             <p>
-              На жаль за вашим запитом не знайдено івентів.Спробуйте застосувати
-              інші фільтри або очистити пошук.
+              На жаль за вашим запитом не знайдено івентів. Спробуйте
+              застосувати інші фільтри або очистити пошук.
             </p>
           </div>
         )}
