@@ -73,15 +73,6 @@ const MobileMenu = ({ open, onClose }) => {
                 <span className={styles.arrow}>{ArrowSvg}</span>
               </Link>
 
-              <Link
-                to="/registered"
-                className={styles.navCard}
-                onClick={onClose}
-              >
-                <span>Реєстрації</span>
-                <span className={styles.arrow}>{ArrowSvg}</span>
-              </Link>
-
               <Link to="/archived" className={styles.navCard} onClick={onClose}>
                 <span>Архівовані івенти</span>
                 <span className={styles.arrow}>{ArrowSvg}</span>

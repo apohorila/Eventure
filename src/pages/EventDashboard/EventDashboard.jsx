@@ -67,22 +67,22 @@ const EventDashboard = () => {
     fetchData();
   }, [eventId]);
 
-  const handleStatusChange = async (userId, newStatus) => {
+  const handleStatusChange = async (participantId, newStatus) => {
     const token = getToken();
     const previousParticipants = [...participants];
 
-    if (newStatus === "REJECTED") {
-      setParticipants((prev) => prev.filter((p) => p.userId !== userId));
+    if (newStatus === "DENIED") {
+      setParticipants((prev) => prev.filter((p) => p.id !== participantId));
     } else {
       setParticipants((prev) =>
         prev.map((p) =>
-          p.userId === userId ? { ...p, status: newStatus } : p,
+          p.id === participantId ? { ...p, status: newStatus } : p,
         ),
       );
     }
 
     try {
-      await changeParticipantStatus(eventId, userId, newStatus, token);
+      await changeParticipantStatus(eventId, participantId, newStatus, token);
     } catch (err) {
       console.error("Error updating status:", err);
       alert("Помилка при оновленні статусу");
@@ -94,9 +94,7 @@ const EventDashboard = () => {
     navigate(`/profile/${userId}`);
   };
 
-  const pendingRequests = participants.filter(
-    (p) => p.status === "PENDING" || p.status === "WAITING",
-  );
+  const pendingRequests = participants.filter((p) => p.status === "PENDING");
 
   const approvedParticipants = participants.filter(
     (p) => p.status === "APPROVED",
@@ -131,9 +129,9 @@ const EventDashboard = () => {
       {event && (
         <div className={styles.eventInfo}>
           <div className={styles.eventImageWrapper}>
-            {event.photoUrl || event.bannerPhotoUrl ? (
+            {event.bannerPhotoUrl ? (
               <img
-                src={event.photoUrl || event.bannerPhotoUrl}
+                src={event.bannerPhotoUrl}
                 alt={event.title}
                 className={styles.eventImage}
               />
@@ -156,10 +154,7 @@ const EventDashboard = () => {
             <div className={styles.eventDate}>
               {(() => {
                 const date = new Date(event.eventDate);
-                const day = date.getDate();
-                const month = String(date.getMonth() + 1).padStart(2, "0");
-                const year = date.getFullYear();
-                return `${day}.${month}.${year}`;
+                return `${date.getDate()}.${String(date.getMonth() + 1).padStart(2, "0")}.${date.getFullYear()}`;
               })()}
             </div>
 
@@ -167,10 +162,7 @@ const EventDashboard = () => {
               <div className={styles.metaItem}>
                 <span className={styles.metaLabel}>Стать:</span>
                 <span className={styles.metaValue}>
-                  {event.requiredGender === "ANY" ||
-                  event.requiredGender === "Всі"
-                    ? "Всі"
-                    : event.requiredGender || "Всі"}
+                  {event.requiredGender || "Всі"}
                 </span>
               </div>
               <div className={styles.metaItem}>
@@ -184,7 +176,7 @@ const EventDashboard = () => {
                 </span>
               </div>
               <div className={styles.metaItem}>
-                <span className={styles.metaLabel}>Кількість учасників:</span>
+                <span className={styles.metaLabel}>Учасники:</span>
                 <span className={styles.metaValue}>
                   {approvedParticipants.length} / {event.maxParticipants || "∞"}
                 </span>
@@ -193,30 +185,14 @@ const EventDashboard = () => {
 
             <div
               className={styles.organizer}
-              style={{ cursor: "pointer" }}
-              onClick={() =>
-                organizerProfile &&
-                handleUserClick(organizerProfile.id || event.organizerId)
-              }
+              onClick={() => handleUserClick(event.organizerId)}
             >
               <div className={styles.organizerAvatar}>
-                {organizerProfile?.avatarUrl ? (
-                  <img
-                    src={organizerProfile.avatarUrl}
-                    alt={organizerProfile.name}
-                    onError={(e) => {
-                      e.target.onerror = null;
-                      e.target.src = "/assets/icons/user.png";
-                      e.target.className = styles.defaultUserIcon;
-                    }}
-                  />
-                ) : (
-                  <img
-                    src="/assets/icons/user.png"
-                    alt="Default avatar"
-                    className={styles.defaultUserIcon}
-                  />
-                )}
+                <img
+                  src={organizerProfile?.avatarUrl || "/assets/icons/user.png"}
+                  alt="Organizer"
+                  onError={(e) => (e.target.src = "/assets/icons/user.png")}
+                />
               </div>
               <div className={styles.organizerInfo}>
                 <div className={styles.organizerName}>
@@ -237,57 +213,40 @@ const EventDashboard = () => {
 
       <section className={styles.section}>
         <h2 className={styles.sectionTitle}>Запити</h2>
-
         {pendingRequests.length === 0 ? (
           <div className={styles.emptyState}>Немає нових запитів</div>
         ) : (
           <div className={styles.requestsList}>
             {pendingRequests.map((user) => (
-              <div key={user.userId} className={styles.requestCard}>
+              <div key={user.id} className={styles.requestCard}>
                 <div
                   className={styles.userInfo}
-                  onClick={() => handleUserClick(user.userId)}
-                  style={{ cursor: "pointer" }}
+                  onClick={() => handleUserClick(user.id)}
                 >
                   <div className={styles.avatar}>
-                    {user.avatarUrl ? (
-                      <img
-                        src={user.avatarUrl}
-                        alt={user.name}
-                        onError={(e) => {
-                          e.target.onerror = null;
-                          e.target.src = "/assets/icons/user.png";
-                          e.target.className = styles.defaultUserIcon;
-                        }}
-                      />
-                    ) : (
-                      <img
-                        src="/assets/icons/user.png"
-                        alt="Default avatar"
-                        className={styles.defaultUserIcon}
-                      />
-                    )}
+                    <img
+                      src={user.picture || "/assets/icons/user.png"}
+                      alt={user.name}
+                      onError={(e) => (e.target.src = "/assets/icons/user.png")}
+                    />
                   </div>
                   <div className={styles.userDetails}>
                     <div className={styles.userName}>{user.name}</div>
                     <div className={styles.userNick}>
-                      @{user.username || "user"}
+                      @{user.email || "user"}
                     </div>
                   </div>
                 </div>
-
                 <div className={styles.actions}>
                   <button
+                    onClick={() => handleStatusChange(user.id, "APPROVED")}
                     className={styles.btnAction}
-                    onClick={() => handleStatusChange(user.userId, "APPROVED")}
-                    title="Прийняти"
                   >
                     <img src="/assets/icons/accept.png" alt="Accept" />
                   </button>
                   <button
+                    onClick={() => handleStatusChange(user.id, "DENIED")}
                     className={styles.btnAction}
-                    onClick={() => handleStatusChange(user.userId, "REJECTED")}
-                    title="Відхилити"
                   >
                     <img src="/assets/icons/reject.png" alt="Reject" />
                   </button>
@@ -300,45 +259,26 @@ const EventDashboard = () => {
 
       <section className={styles.section}>
         <h2 className={styles.sectionTitle}>Учасники</h2>
-
         {approvedParticipants.length === 0 ? (
-          <div className={styles.emptyState}>
-            Ще немає затверджених учасників
-          </div>
+          <div className={styles.emptyState}>Ще немає учасників</div>
         ) : (
           <div className={styles.participantsGrid}>
             {approvedParticipants.map((user) => (
               <div
-                key={user.userId}
+                key={user.id}
                 className={styles.participantCard}
-                onClick={() => handleUserClick(user.userId)}
-                style={{ cursor: "pointer" }}
+                onClick={() => handleUserClick(user.id)}
               >
                 <div className={styles.avatar}>
-                  {user.avatarUrl ? (
-                    <img
-                      src={user.avatarUrl}
-                      alt={user.name}
-                      onError={(e) => {
-                        e.target.onerror = null;
-                        e.target.src = "/assets/icons/user.png";
-                        e.target.className = styles.defaultUserIcon;
-                      }}
-                    />
-                  ) : (
-                    <img
-                      src="/assets/icons/user.png"
-                      alt="Default avatar"
-                      className={styles.defaultUserIcon}
-                    />
-                  )}
+                  <img
+                    src={user.picture || "/assets/icons/user.png"}
+                    alt={user.name}
+                    onError={(e) => (e.target.src = "/assets/icons/user.png")}
+                  />
                 </div>
-
                 <div className={styles.participantText}>
                   <div className={styles.userName}>{user.name}</div>
-                  <div className={styles.userNick}>
-                    @{user.username || "user"}
-                  </div>
+                  <div className={styles.userNick}>@{user.email || "user"}</div>
                 </div>
               </div>
             ))}
