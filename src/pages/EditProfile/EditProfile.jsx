@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import {  useNavigate, useParams } from "react-router-dom";
 import styles from "./EditProfile.module.css";
 import InterestCheckbox from "../../components/InterestCheckbox/InterestCheckbox";
 import { CategoryProvider, useCategories } from "../../context/CategoryContext";
+import { getUserProfile } from "../../server/api";
+import { useAuth } from "../../context/AuthContext";
 
 const EditProfile = () => {
   const { categories } = useCategories();
-  const { userId } = useParams();
-  const location = useLocation();
   const navigate = useNavigate();
+  const { user } = useAuth();
+  const userId = user.id;
 
   const [formData, setFormData] = useState(
     location.state?.initialData || {
@@ -23,6 +25,36 @@ const EditProfile = () => {
       interests_ids: [],
     },
   );
+  useEffect(() => {
+    const loadProfile = async () => {
+      if (!userId) return;
+      
+      try {
+        const token = sessionStorage.getItem("access_token");
+        const data = await getUserProfile(userId, token);
+
+        if (data) {
+          setFormData({
+            firstName: data.firstName || "",
+            lastName: data.lastName || "",
+            email: data.email || "",
+            bio: data.bio || "",
+            location: data.location || "",
+            gender: data.gender || "",
+            age: data.age || "",
+          });
+          setSocialLinks(data.socialMediaLinks || []); 
+          setSelectedInterests(data.interestsIds || []);
+          setPreviewUrl(data.photoUrl || "");
+        }
+      } catch (err) {
+        console.error("Помилка завантаження:", err);
+      } finally {
+      }
+    };
+
+    loadProfile();
+  }, [userId]);
 
   const [selectedFile, setSelectedFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(formData.photoUrl || "");
