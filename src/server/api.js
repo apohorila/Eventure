@@ -544,7 +544,7 @@ export async function getEventsArchive(userId, token, type) {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        ...(token && { AUthorization: `Bearer ${token}` }),
+        ...(token && { Authorization: `Bearer ${token}` }),
       },
     });
     if (!response.ok) {
@@ -647,4 +647,26 @@ export async function getMyTotalEvents(token, status = "APPROVED") {
   } catch (error) {
     return toCamelCase(MOCK_EVENTS_DB);
   }
+}
+export async function rateEvent(eventId, score, comment, token) {
+  if (!token) {
+    throw new Error("Необхідна авторизація для оцінки події");
+  }
+
+  const response = await fetch(`${API_BASE_URL}/v1/events/${eventId}/rate`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+
+    body: JSON.stringify({ score, comment }),
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({}));
+    throw new Error(errorData.message || "Не вдалося відправити оцінку");
+  }
+
+  return true;
 }

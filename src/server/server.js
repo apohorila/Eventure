@@ -181,7 +181,7 @@ export function makeServer() {
             category_id: 5,
             banner_photo_url: "https://picsum.photos/seed/jazz/600/400",
             location: "Львів",
-            min_age: 35,
+            min_age: 18,
             max_age: 70,
             required_gender: "ANY",
             chat_link: "https://t.me/jazz_night",
